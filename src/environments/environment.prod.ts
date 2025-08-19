@@ -1,11 +1,12 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: 'REEMPLAZA_CON_TU_API_KEY',
-    authDomain: 'REEMPLAZA_CON_TU_AUTH_DOMAIN',
-    projectId: 'REEMPLAZA_CON_TU_PROJECT_ID',
-    storageBucket: 'REEMPLAZA_CON_TU_STORAGE_BUCKET',
-    messagingSenderId: 'REEMPLAZA_CON_TU_MESSAGING_SENDER_ID',
-    appId: 'REEMPLAZA_CON_TU_APP_ID'
+    apiKey: "AIzaSyDLDPIpYWWvV1lxPO706ArWXKND1hUES1E",
+    authDomain: "compgamerstore.firebaseapp.com",
+    projectId: "compgamerstore",
+    storageBucket: "compgamerstore.firebasestorage.app",
+    messagingSenderId: "840480061585",
+    appId: "1:840480061585:web:be32259393d737f7512730",
+    measurementId: "G-0KTBVD7V8G"
   }
 };
