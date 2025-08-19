@@ -1,0 +1,108 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <div class="container-login">
+      <div class="transision"></div>
+      <!-- Formulario para realizar el logeo -->
+      <form class="login-form">
+        <ion-img src="../../../../assets/Logo/logo_light.png" alt="Logotipo" class="logo"></ion-img>
+        <ion-item>
+          <ion-label position="floating" id="emailLabel" class="emailLabel">Email o nombre de usuario</ion-label>
+          <ion-input type="text" id="emailInput" class="emailInput" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Password</ion-label>
+          <ion-input type="password" required></ion-input>
+        </ion-item>
+        <ion-button expand="full" type="submit" shape="round">Login</ion-button>
+        <ion-button class="RegistrarseLogin" (click)="activarLoginForm()">Registrarse</ion-button>
+      </form>
+      <!-- Formulario registra usuario-->
+      <form class="register-form">
+        <!-- informacion basica -->
+        <div>
+          <ion-item>
+            <ion-label position="floating">Nombres</ion-label>
+            <ion-input type="text" required></ion-input>
+          </ion-item>
+        </div>
+        <div>
+          <ion-item>
+            <ion-label position="floating">Apellidos</ion-label>
+            <ion-input type="text" required></ion-input>
+          </ion-item>
+        </div>
+        <div>
+          <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" required></ion-input>
+          </ion-item>
+        </div>
+        <div>
+          <ion-item>
+            <ion-label position="floating">Edad</ion-label>
+            <ion-input type="number" required></ion-input>
+          </ion-item>
+        </div>
+        <!-- Tipo de documento -->
+        <div>
+          <ion-item>
+            <ion-select label="Tipo de documento" interface="popover" placeholder="Seleccione..." justify="start">
+              <ion-select-option value="CC">Cedula de ciudadania</ion-select-option>
+              <ion-select-option value="CE">Cedula de extranjeria</ion-select-option>
+              <ion-select-option value="NIT">Identificacion empresarial</ion-select-option>
+              <ion-select-option value="PAST">Pasaporte</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <!-- Numero de documento -->
+        <div>
+          <ion-item>
+            <ion-label position="floating">Numero de documento</ion-label>
+            <ion-input type="number" required></ion-input>
+          </ion-item>
+        </div>
+
+        <!-- ubicacion -->
+        <div>
+          <ion-item>
+            <ion-select label="Ciudad de residencia" [interfaceOptions]="customDepartamentActionSheetOptions"
+              interface="modal" placeholder="Seleccione..." (ionChange)="fruitSelectionChanged($event.detail.value)">
+              <ion-select-option *ngFor="let Departament of valueDepartament" [value]="Departament.value">
+                {{ Departament.text }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+        <div>
+          <ion-item>
+            <ion-select label="Ciudad de residencia" [interfaceOptions]="customMunicipalityActionSheetOptions"
+              interface="modal" placeholder="Seleccione...">
+              <ion-select-option *ngFor="let Municipality of valueMunicipality" [value]="Municipality.value">
+                {{ Municipality.text }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <div>
+          <ion-item>
+            <ion-label position="floating">Direreccion</ion-label>
+            <ion-input type="text" required></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="button-register">
+          <ion-button expand="full" type="submit" shape="round">Login</ion-button>
+          <ion-button expand="full" type="button" shape="round" class="clancelar">cancelar</ion-button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ion-content>
