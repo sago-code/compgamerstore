@@ -53,21 +53,31 @@ export class LoginPage {
   activarLoginForm() {
     const loginForm = document.querySelector('.login-form');
     const registerForm = document.querySelector('.register-form');
-    if (loginForm && registerForm) {
-      console.log(loginForm.classList.contains('loginDesactive'));
+    const transisionActive = document.querySelector('.transision');
+    if (loginForm && registerForm && transisionActive) {
       if (loginForm.classList.contains('loginDesactive')) {
         loginForm.classList.remove('loginDesactive');
+        loginForm.classList.add('loginActive');
       }else {
+        loginForm.classList.remove('loginActive');
         loginForm.classList.add('loginDesactive');
+        transisionActive.classList.add('transisionActive');
       }
       if (registerForm.classList.contains('registerActive')) {
         registerForm.classList.remove('registerActive');
+        registerForm.classList.add('registerDesactive');
       }else {
         registerForm.classList.add('registerActive');
+        registerForm.classList.remove('registerDesactive');
       }
     }
-  }
 
+    setTimeout(() => {
+      if (transisionActive) {
+      transisionActive.classList.remove('transisionActive');
+      }
+    }, 1000);
+  }
 }
 
 export interface ItemDepartament {

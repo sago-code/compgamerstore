@@ -9,7 +9,7 @@
 }
 
 .container-login {
-  display: flex;
+  display: block;
   max-width: 700px;
   width: 90%;
   background-color: var(--ion-toolbar-background);
@@ -23,6 +23,7 @@
   width: 100%;
   padding: 5px;
   transition: 500ms ;
+  interpolate-size: allow-keywords;
 }
 
 .container-login::before {
@@ -101,6 +102,7 @@
 .container-login .login-form {
   display: flex;
   width: 100%;
+  top: 0%;
   height: max-content;
   padding: 10px;
   overflow: hidden;
@@ -114,15 +116,26 @@
   opacity: 1;
   transition: 200ms ;
   transition-delay: 501ms;
+  interpolate-size: allow-keywords;
+}
+
+.container-login .loginActive {
+  height: max-content;
+  width: 100%;
+  top: 0%;
+  transition: 500ms;
+  transition-delay: 0ms;
+  interpolate-size: allow-keywords;
 }
 
 .container-login .loginDesactive {
-  width: 0px;
-  height: 0px;
+  height: 0;
+  width: 100%;
+  top: -100%;
   padding: 0px;
-  opacity: 0;
-  transition: 200ms ;
-  transition-delay: 501ms;
+  transition: 500ms;
+  transition-delay: 0ms;
+  interpolate-size: allow-keywords;
 }
 
 
@@ -171,8 +184,9 @@ ion-button {
 
 .register-form {
   display: flex;
-  width: 0px;
-  height: 0px;
+  width: 100%;
+  top: 100%;
+  height: 0;
   overflow: hidden;
   flex-wrap: wrap;
   flex-direction: row;
@@ -182,8 +196,9 @@ ion-button {
   position: relative;
   z-index: 1;
   justify-content: space-around;
-  transition: 0s;
+  transition: height 500ms;
   transition-delay: 501ms;
+  interpolate-size: allow-keywords;
 }
 
 .register-form>div {
@@ -215,11 +230,21 @@ ion-button {
 }
 
 .container-login .registerActive {
-  width: 100%;
   height: max-content;
-  padding: 10px;
-  transition: 0s ;
+  width: 100%;
+  top: 0%;
+  transition: height 500ms;
   transition-delay: 501ms;
+  interpolate-size: allow-keywords;
+}
+
+.container-login .registerDesactive {
+  height: 0;
+  width: 100%;
+  top: 0%;
+  transition: height 500ms;
+  transition-delay: 0ms;
+  interpolate-size: allow-keywords;
 }
 
 
@@ -244,8 +269,8 @@ ion-button {
   z-index: 2;
 }
 
-.container-login:has(.registerActive) .transision::before {
-  animation: transisionBefore 1s linear forwards;
+.container-login .transisionActive::before {
+  animation: transisionBefore 1s linear;
 }
 
 
@@ -296,8 +321,8 @@ ion-button {
 }
 
 
-.container-login:has(.registerActive) .transision::after {
-  animation: transisionAfter 1s linear forwards;
+.container-login .transisionActive::after{
+  animation: transisionAfter 1s linear;
 }
 
 
