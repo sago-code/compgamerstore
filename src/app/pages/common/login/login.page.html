@@ -9,100 +9,133 @@
     <div class="container-login">
       <div class="transision"></div>
       <!-- Formulario para realizar el logeo -->
-      <form class="login-form">
+      <form class="login-form" [formGroup]="loginForm">
         <ion-img src="../../../../assets/Logo/logo_light.png" alt="Logotipo" class="logo"></ion-img>
         <ion-item>
           <ion-label position="floating" id="emailLabel" class="emailLabel">Email o nombre de usuario</ion-label>
-          <ion-input type="text" id="emailInput" class="emailInput" required></ion-input>
+          <ion-input type="email" id="emailInput" class="emailInput" required formControlName="email"></ion-input>
+          {{loginForm.value.email}}
         </ion-item>
         <ion-item>
           <ion-label position="floating">Password</ion-label>
-          <ion-input type="password" required></ion-input>
+          <ion-input type="password" required formControlName="password"></ion-input>
+          {{loginForm.value.password}}
         </ion-item>
+        <p class="olvidaste-contrasena" (click)="activarOlvidasteContrasenaForm()">¿Olvidaste tu contraseña?</p>
         <ion-button expand="full" type="submit" shape="round">Login</ion-button>
         <ion-button class="RegistrarseLogin" (click)="activarLoginForm()">Registrarse</ion-button>
       </form>
       <!-- Formulario registra usuario-->
-      <form class="register-form">
+      <form class="register-form" [formGroup]="registerForm" (ngSubmit)="register()">
         <!-- informacion basica -->
         <div>
           <ion-item>
             <ion-label position="floating">Nombres</ion-label>
-            <ion-input type="text" required></ion-input>
+            <ion-input type="text" formControlName="first_name" required></ion-input>
+            {{registerForm.value.first_name}}
           </ion-item>
         </div>
         <div>
           <ion-item>
             <ion-label position="floating">Apellidos</ion-label>
-            <ion-input type="text" required></ion-input>
+            <ion-input type="text" formControlName="last_name" required></ion-input>
+            {{registerForm.value.last_name}}
           </ion-item>
         </div>
         <div>
           <ion-item>
             <ion-label position="floating">Email</ion-label>
-            <ion-input type="email" required></ion-input>
+            <ion-input type="email" formControlName="email" required></ion-input>
+            {{registerForm.value.email}}
+          </ion-item>
+        </div>
+        <div>
+          <ion-item>
+            <ion-label position="floating">Contraseña</ion-label>
+            <ion-input type="password" formControlName="password" required></ion-input>
+            {{registerForm.value.password}}
+          </ion-item>
+        </div>
+        <div>
+          <ion-item>
+            <ion-label position="floating">Confirmar contraseña</ion-label>
+            <ion-input type="password" formControlName="confirm_password" required></ion-input>
+            {{registerForm.value.confirm_password}}
           </ion-item>
         </div>
         <div>
           <ion-item>
             <ion-label position="floating">Edad</ion-label>
-            <ion-input type="number" required></ion-input>
+            <ion-input type="number" formControlName="age" required></ion-input>
+            {{registerForm.value.age}}
           </ion-item>
         </div>
         <!-- Tipo de documento -->
         <div>
           <ion-item>
-            <ion-select label="Tipo de documento" interface="popover" placeholder="Seleccione..." justify="start">
+            <ion-select label="Tipo de documento" interface="popover" placeholder="Seleccione..." justify="start" formControlName="document_type">
               <ion-select-option value="CC">Cedula de ciudadania</ion-select-option>
               <ion-select-option value="CE">Cedula de extranjeria</ion-select-option>
               <ion-select-option value="NIT">Identificacion empresarial</ion-select-option>
               <ion-select-option value="PAST">Pasaporte</ion-select-option>
             </ion-select>
+            {{registerForm.value.document_type}}
           </ion-item>
         </div>
-
         <!-- Numero de documento -->
         <div>
           <ion-item>
             <ion-label position="floating">Numero de documento</ion-label>
-            <ion-input type="number" required></ion-input>
+            <ion-input type="number" formControlName="document_number" required></ion-input>
+            {{registerForm.value.document_number}}
           </ion-item>
         </div>
-
         <!-- ubicacion -->
         <div>
           <ion-item>
             <ion-select label="Ciudad de residencia" [interfaceOptions]="customDepartamentActionSheetOptions"
-              interface="modal" placeholder="Seleccione..." (ionChange)="fruitSelectionChanged($event.detail.value)">
+              interface="modal" placeholder="Seleccione..." (ionChange)="fruitSelectionChanged($event.detail.value)" formControlName="departament">
               <ion-select-option *ngFor="let Departament of valueDepartament" [value]="Departament.value">
                 {{ Departament.text }}
               </ion-select-option>
+              {{registerForm.value.departament}}
             </ion-select>
           </ion-item>
         </div>
         <div>
           <ion-item>
             <ion-select label="Ciudad de residencia" [interfaceOptions]="customMunicipalityActionSheetOptions"
-              interface="modal" placeholder="Seleccione...">
+              interface="modal" placeholder="Seleccione..." formControlName="municipality">
               <ion-select-option *ngFor="let Municipality of valueMunicipality" [value]="Municipality.value">
                 {{ Municipality.text }}
               </ion-select-option>
+              {{registerForm.value.municipality}}
             </ion-select>
           </ion-item>
         </div>
-
         <div>
           <ion-item>
             <ion-label position="floating">Direreccion</ion-label>
-            <ion-input type="text" required></ion-input>
+            <ion-input type="text" formControlName="address" required></ion-input>
+            {{registerForm.value.address}}
           </ion-item>
         </div>
-
+        <!-- Campo oculto para el rol (por defecto admin) -->
+        <input type="hidden" formControlName="role" value="admin" />
         <div class="button-register">
-          <ion-button expand="full" type="submit" shape="round">Login</ion-button>
+          <ion-button expand="full" type="submit" shape="round" [disabled]="loadingRegister">Registrarse</ion-button>
           <ion-button expand="full" type="button" shape="round" class="clancelar" (click)="activarLoginForm()">cancelar</ion-button>
         </div>
       </form>
+      <!-- Formulario para recuperar contraseña -->
+      <form class="olvidaste-contrasena-form">
+        <ion-item>
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="email" required></ion-input>
+        </ion-item>
+        <ion-button expand="full" type="submit" shape="round">Recuperar contraseña</ion-button>
+        <ion-button expand="full" type="button" shape="round" class="clancelar" (click)="activarOlvidasteContrasenaForm()">cancelar</ion-button>
+      </form> 
     </div>
   </div>
 </ion-content>
