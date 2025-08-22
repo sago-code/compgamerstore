@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from 'src/app/services/firebase/users/users.service';
 import { Router } from '@angular/router';
+import { SessionService } from 'src/app/services/session.service';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ import { Router } from '@angular/router';
 export class LoginPage implements OnInit {
   
   loadingRegister = false;
+  photoPreview: string | null = null;
 
   //formulario de login
   loginForm = new FormGroup({
@@ -22,6 +24,7 @@ export class LoginPage implements OnInit {
 
   // Formulario de registro de usuarios
   registerForm = new FormGroup({
+    phone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+$')]),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
     confirm_password: new FormControl('', [Validators.required]),
@@ -33,10 +36,11 @@ export class LoginPage implements OnInit {
     departament: new FormControl('', [Validators.required]),
     municipality: new FormControl('', [Validators.required]),
     address: new FormControl('', [Validators.required]),
-    role: new FormControl('admin', [Validators.required])
+    role: new FormControl('admin', [Validators.required]),
+    photo: new FormControl(null)
   });
 
-  constructor(private firebaseSvc: FirebaseService, private router: Router) {}
+  constructor(private firebaseSvc: FirebaseService, private router: Router, private session: SessionService) {}
 
   customActionSheetOptions = {
     header: 'Tipo de documento',
@@ -69,7 +73,7 @@ export class LoginPage implements OnInit {
     { text: 'IBAGUE', value: '005', codDepartament: '25' }
   ];
   valueMunicipality : ItemMunicipality[] = this.valueMunicipalityTotal;
-
+  
   fruitSelectionChanged(fruits: string[]) {
     this.valueMunicipality = this.valueMunicipalityTotal.filter(municipality =>
       fruits.includes(municipality.codDepartament)
@@ -136,6 +140,23 @@ export class LoginPage implements OnInit {
     }, 1000);
   }
 
+  onPhotoSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      if (!file.type.startsWith('image/')) {
+        alert('Selecciona solo archivos de imagen.');
+        return;
+      }
+      this.registerForm.patchValue({ photo: file });
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.photoPreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   // Registra un nuevo usuario
   async register() {
     if (this.registerForm.invalid) {
@@ -154,6 +175,7 @@ export class LoginPage implements OnInit {
 
     const user = {
       uid: '',
+      photo: this.photoPreview || '',
       first_name: form.first_name,
       last_name: form.last_name,
       email: form.email,
@@ -163,6 +185,7 @@ export class LoginPage implements OnInit {
       document_number: form.document_number,
       departament: form.departament,
       municipality: form.municipality,
+      phone: form.phone,
       direction: form.address,
       role: form.role,
       created_at: null,
@@ -171,21 +194,40 @@ export class LoginPage implements OnInit {
     } as any;
 
     try {
-      const uid = await this.firebaseSvc.registerUser(user);
-      // Iniciar sesión inmediatamente después del registro
-      const session = await this.firebaseSvc.login(form.email, form.password);
-      // Persistir sesión en localStorage y sessionStorage
-      const payload = {
-        uid: session.uid || uid,
-        email: session.email,
-        token: session.token,
-        first_name: form.first_name,
-        last_name: form.last_name,
-        role: form.role
-      };
-      localStorage.setItem('auth_user', JSON.stringify(payload));
-      sessionStorage.setItem('auth_user', JSON.stringify(payload));
-
+      let uid;
+      const currentUser = this.firebaseSvc['auth'].currentUser || undefined;
+      if (!currentUser) {
+        // Crear usuario (email/password) y doc Firestore si NO hay sesión previa (email tradicional)
+        uid = await this.firebaseSvc.registerUser(user);
+        // Logueo después del registro
+        const session = await this.firebaseSvc.login(form.email, form.password);
+        const payload = {
+          uid: session.uid || uid,
+          email: session.email,
+          token: session.token,
+          first_name: form.first_name,
+          last_name: form.last_name,
+          role: form.role,
+          phone: form.phone,
+          photo: this.photoPreview || ''
+        };
+        await this.session.setSession(payload);
+      } else {
+        // Ya AUTENTICADO (por Google), solo agrega/actualiza doc en /users, NO crea usuario de nuevo
+        uid = await this.firebaseSvc.registerUser(user);
+        // Usa los datos del formulario, NO los "viejos" de la sesión
+        const payload = {
+          uid: currentUser.uid,
+          email: currentUser.email,
+          token: await currentUser.getIdToken(),
+          first_name: form.first_name,
+          last_name: form.last_name,
+          role: form.role,
+          phone: form.phone,
+          photo: this.photoPreview || ''
+        };
+        await this.session.setSession(payload);
+      }
       alert('Usuario registrado e inició sesión correctamente');
       this.registerForm.reset();
       this.router.navigateByUrl('/home', { replaceUrl: true });
@@ -205,20 +247,77 @@ export class LoginPage implements OnInit {
     const form = this.loginForm.value;
 
     try {
+      // Hace login con email/clave
       const session = await this.firebaseSvc.login(form.email, form.password);
-      // Persistir sesión en localStorage y sessionStorage
+
+      // Ahora trae el perfil completo de Firestore (incluye rol)
+      const userProfile = await this.firebaseSvc.getUserProfile(session.uid);
+
       const payload = {
         uid: session.uid,
         email: session.email,
-        token: session.token
+        token: session.token,
+        ...userProfile // agrega role, phone, photo, etc si existe en Firestore
       };
-      localStorage.setItem('auth_user', JSON.stringify(payload));
-      sessionStorage.setItem('auth_user', JSON.stringify(payload));
+
+      await this.session.setSession(payload);
 
       alert('Inicio de sesión exitoso');
       this.router.navigateByUrl('/home', { replaceUrl: true });
     } catch (err: any) {
       alert('Error al iniciar sesión: ' + (err?.message || err));
+    }
+  }
+
+  async loginWithGoogle() {
+    try {
+      const result = await this.firebaseSvc.loginWithGoogle();
+      if (result.exists) {
+        // Trae el doc Firestore con el role
+        const userProfile = await this.firebaseSvc.getUserProfile(result.session.uid);
+        const sessionPayload = {
+          ...result.session,
+          ...(userProfile ? {
+            role: userProfile.role,
+            phone: userProfile.phone,
+            photo: userProfile.photo,
+            email: userProfile.email,
+            // agrega aquí cualquier otro campo de perfil que uses
+          } : {})
+        };
+        await this.session.setSession(sessionPayload);
+        alert('Inicio de sesión con Google exitoso');
+        this.router.navigateByUrl('/home', { replaceUrl: true });
+      } else {
+        this.activarLoginForm();
+        this.registerForm.patchValue({
+          email: result.session.email,
+          first_name: result.session.first_name,
+          last_name: result.session.last_name,
+          photo: result.session.photo
+        });
+        this.photoPreview = result.session.photo;
+        alert('Completa tu registro antes de continuar.');
+      }
+    } catch (err: any) {
+      alert('Error de autenticación con Google: ' + (err?.message || err));
+    }
+  }
+
+  olvidasteEmail = "";
+
+  async recoverPassword(email: string) {
+    if (!email) {
+      alert('Introduce tu correo electrónico.');
+      return;
+    }
+    try {
+      await this.firebaseSvc.sendPasswordReset(email);
+      alert('Correo de recuperación enviado. Revisa tu email.');
+      this.olvidasteEmail = "";
+      this.activarLoginForm();
+    } catch (err: any) {
+      alert('Error al enviar reset: ' + (err?.message || err));
     }
   }
 

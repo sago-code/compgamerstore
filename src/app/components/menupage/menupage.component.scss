@@ -16,7 +16,7 @@ body {
   min-height: 100vh;
 }
 .navigation {
-  width: 420px;
+  width: 100%;
   height: 70px;
   background: #fff; /* Change Navigation Color here */
   position: relative;
@@ -64,17 +64,18 @@ body {
 }
 
 .indicator {
-  position: absolute;
-  top: -10px;
-  width: 70px;
-  height: 70px;
-  border-bottom-left-radius: 35px;
-  border-bottom-right-radius: 35px;
-  border: 6px solid var(--clr);
-  background: var(--clr);
-  cursor: pointer;
-  transition: 0.5s;
+    position: absolute;
+    top: -10px;
+    width: 70px;
+    height: 70px;
+    border-bottom-left-radius: 35px;
+    border-bottom-right-radius: 35px;
+    border: 6px solid #262433;
+    background: #262433;
+    cursor: pointer;
+    transition: 0.5s;
 }
+
 .indicator::before {
   content: "";
   position: absolute;
@@ -83,7 +84,7 @@ body {
   width: 20px;
   height: 20px;
   border-top-right-radius: 20px;
-  box-shadow: 4px -6px 0 2px var(--clr);
+  box-shadow: 4px -6px 0 2px #262433;
 }
 
 .indicator::after {
@@ -94,7 +95,7 @@ body {
   width: 20px;
   height: 20px;
   border-top-left-radius: 20px;
-  box-shadow: -4px -6px 0 2px var(--clr);
+  box-shadow: -4px -6px 0 2px #262433;
   z-index: -1;
 }
 .navigation ul li:nth-child(2).active ~ .indicator {

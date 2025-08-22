@@ -1,20 +1,37 @@
 <ion-header [translucent]="true">
+  <app-menupage></app-menupage>
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <div>
+      
+      <ion-title>
+        Home
+      </ion-title>
+      
+      <ion-input></ion-input>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="!loading; else loader">
+    <ion-header collapse="condense">
+      <ion-toolbar>
+        <ion-title size="large">Home</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <div id="container">
+      <strong>Bienvenido</strong>
+      <p *ngIf="role=='admin'">Eres Admin.</p>
+      <p *ngIf="role=='cliente'">Eres Cliente.</p>
+      <p *ngIf="!role">Role desconocido</p>
+      <p>Aquí iría el contenido de la Home.</p>
+    </div>
+  </ng-container>
+  <ng-template #loader>
+    <div class="home-loader">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  </ng-template>
 </ion-content>
