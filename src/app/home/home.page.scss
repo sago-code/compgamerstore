@@ -25,3 +25,9 @@
 #container a {
   text-decoration: none;
 }
+
+.menuHeader {
+  display: flex;
+  background: var(--ion-toolbar-background, var(--ion-background-color, #fff));
+  justify-content: space-between;
+}
