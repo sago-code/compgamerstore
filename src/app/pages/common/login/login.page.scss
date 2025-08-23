@@ -423,7 +423,7 @@ ion-button {
   overflow: hidden;
   align-items: center;
   justify-content: center;
-  background: var(--ion-color-light, #f4f5f8);
+  background: var(--ion-color-secondary, --ion-color-secondary);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   position: relative;
@@ -431,7 +431,7 @@ ion-button {
 
 .register-form .avatar ion-icon {
   font-size: 110px;
-  color: var(--ion-color-medium, #92949c);
+  color: var(--ion-color-chitonary, --ion-color-chitonary);
 }
 
 .register-form .avatar img {
@@ -473,4 +473,11 @@ ion-button {
   .container {
     height: auto;
   }
+}
+.button-disabled {
+  --background: var(--ion-color-septonary) !important;
+  --color: var(--ion-color-sextonary) !important;
+  --border-color: var(--ion-color-tertiary) !important;
+  --border-width: 2px !important;
+
 }
