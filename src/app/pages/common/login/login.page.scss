@@ -175,6 +175,7 @@ ion-button {
   --border-color: var(--ion-color-chitonary);
   --border-style: solid;
   --border-width: 1px;
+  transition: 200ms;
 
 }
 
@@ -424,7 +425,7 @@ ion-button {
   align-items: center;
   justify-content: center;
   background: var(--ion-color-secondary, --ion-color-secondary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--ion-color-novenary);
   cursor: pointer;
   position: relative;
 }
@@ -479,5 +480,5 @@ ion-button {
   --color: var(--ion-color-sextonary) !important;
   --border-color: var(--ion-color-tertiary) !important;
   --border-width: 2px !important;
-
+  transition: 200ms;
 }
