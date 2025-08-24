@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FirebaseService } from 'src/app/services/firebase/users/users.service';
+import { UserFirebaseService } from 'src/app/services/firebase/users/users.service';
 import { Router } from '@angular/router';
 import { SessionService } from 'src/app/services/session.service';
 
@@ -40,7 +40,7 @@ export class LoginPage implements OnInit {
     photo: new FormControl(null)
   });
 
-  constructor(private firebaseSvc: FirebaseService, private router: Router, private session: SessionService) {}
+  constructor(private firebaseSvc: UserFirebaseService, private router: Router, private session: SessionService) {}
 
   customActionSheetOptions = {
     header: 'Tipo de documento',

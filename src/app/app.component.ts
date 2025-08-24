@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SessionService } from './services/session.service';
-import { FirebaseService } from './services/firebase/users/users.service';
+import { UserFirebaseService } from './services/firebase/users/users.service';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 @Component({
@@ -12,7 +12,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 export class AppComponent implements OnInit {
   constructor(
     private session: SessionService,
-    private firebaseSvc: FirebaseService
+    private firebaseSvc: UserFirebaseService,
   ) {}
   ngOnInit() {
      // Mantiene sincronía real con Auth y PVC

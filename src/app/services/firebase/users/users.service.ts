@@ -6,7 +6,7 @@ import { getFirestore, Firestore, doc, setDoc, serverTimestamp, getDoc } from 'f
 import { User } from '../../../models/user.model';
 
 @Injectable({ providedIn: 'root' })
-export class FirebaseService {
+export class UserFirebaseService {
   private app: FirebaseApp;
   private auth: Auth;
   private db: Firestore;
