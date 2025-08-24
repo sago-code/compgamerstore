@@ -9,6 +9,90 @@
     </li>
     <li class="list">
       <a href="#">
+        <span class="icon"><ion-icon name="pricetags"></ion-icon></span>
+      </a>
+    </li>
+    <li class="onSoping list">
+      <a href="javascript:void(0)" role="button" tabindex="0" (click)="onSoping(true)">
+        <span class="icon"><ion-icon name="basket"></ion-icon></span>
+      </a>
+    </li>
+    <li class="list">
+      <a href="#">
+        <span class="icon"><ion-icon name="cart"></ion-icon></span>
+      </a>
+    </li>
+    <li class="list">
+      <a [routerLink]="['/login']" data-route>
+        <span class="icon"><ion-icon name="log-in-outline"></ion-icon></span>
+      </a>
+    </li>
+    <div class="indicator"><span></span></div>
+  </ul>
+
+  <!-- Estado 2: Sesión activa - Cliente cliente -->
+  <ul *ngIf="isAuth && role === 'cliente'">
+    <li class="list active">
+      <a href="#">
+        <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
+      </a>
+    </li>
+    <li class="onSoping list">
+      <a href="javascript:void(0)" role="button" tabindex="0" (click)="onSoping(true)">
+        <span class="icon"><ion-icon name="basket"></ion-icon></span>
+      </a>
+    </li>
+    <li class="list">
+      <a href="#">
+        <span class="icon"><ion-icon name="cart"></ion-icon></span>
+      </a>
+    <li class="list">
+      <a href="#">
+        <span class="icon"><ion-icon name="person"></ion-icon></span>
+      </a>
+    </li>
+    <li class="list">
+      <a [routerLink]="['/login']" data-route>
+        <span class="icon"><ion-icon name="power"></ion-icon></span>
+      </a>
+    </li>
+    <div class="indicator"><span></span></div>
+  </ul>
+
+  <!-- Estado 3: Sesión activa - Admin -->
+  <ul *ngIf="isAuth && role === 'admin'">
+    <li class="onSoping list">
+      <a href="javascript:void(0)" role="button" tabindex="0" (click)="onSoping(true)">
+        <span class="icon"><ion-icon name="basket"></ion-icon></span>
+      </a>
+    </li>
+    <li class="list">
+      <a href="#">
+        <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
+      </a>
+    </li>
+    <li class="list">
+      <a href="#">
+        <span class="icon"><ion-icon name="people"></ion-icon></span>
+      </a>
+    </li>
+    <li class="list">
+      <a href="#">
+        <span class="icon"><ion-icon name="person"></ion-icon></span>
+      </a>
+    </li>
+    <li class="logout list">
+      <a href="javascript:void(0)" role="button" tabindex="0" (click)="logout()">
+        <span class="icon"><ion-icon name="power"></ion-icon></span>
+      </a>
+    </li>
+    <div class="indicator"><span></span></div>
+  </ul>
+</div>
+<div [className]="isAuth && role === 'cliente' ? 'onSoping2 navSoping' : isAuth && role === 'admin' ? 'onSoping1 navSopingActive1 navSoping' : 'navSoping'">
+  <ul>
+    <li class="list">
+      <a href="#">
         <span class="icon"><ion-icon name="laptop-outline"></ion-icon></span>
       </a>
     </li>
@@ -22,72 +106,6 @@
         <span class="icon"><ion-icon name="hardware-chip-outline"></ion-icon></span>
       </a>
     </li>
-    <li class="list">
-      <a [routerLink]="['/login']" data-route>
-        <span class="icon"><ion-icon name="log-in-outline"></ion-icon></span>
-      </a>
-    </li>
-    <div class="indicator"><span></span></div>
-  </ul>
-
-  <!-- Estado 2: Sesión activa - Cliente -->
-  <ul *ngIf="isAuth && role === 'cliente'">
-    <li class="list active">
-      <a href="#">
-        <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
-      </a>
-    </li>
-    <li class="list">
-      <a href="#">
-        <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
-      </a>
-    </li>
-    <li class="list">
-      <a href="#">
-        <span class="icon"><ion-icon name="chatbubble-outline"></ion-icon></span>
-      </a>
-    </li>
-    <li class="list">
-      <a href="#">
-        <span class="icon"><ion-icon name="camera-outline"></ion-icon></span>
-      </a>
-    </li>
-    <li class="list">
-      <a href="#">
-        <span class="icon"><ion-icon name="settings-outline"></ion-icon></span>
-      </a>
-    </li>
-    <div class="indicator"><span></span></div>
-  </ul>
-
-  <!-- Estado 3: Sesión activa - Admin -->
-  <ul *ngIf="isAuth && role === 'admin'">
-    <li class="list active">
-      <a href="#">
-        <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
-      </a>
-    </li>
-    <li class="list">
-      <a href="#">
-        <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
-      </a>
-    </li>
-    <li class="list">
-      <a href="#">
-        <span class="icon"><ion-icon name="chatbubble-outline"></ion-icon></span>
-      </a>
-    </li>
-    <li class="list">
-      <a href="#">
-        <span class="icon"><ion-icon name="camera-outline"></ion-icon></span>
-      </a>
-    </li>
-    <li class="list">
-      <a href="#">
-        <span class="icon"><ion-icon name="settings-outline"></ion-icon></span>
-      </a>
-    </li>
-    <div class="indicator"><span></span></div>
   </ul>
 </div>
 <div>compgamerstore</div>

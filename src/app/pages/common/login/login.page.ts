@@ -12,7 +12,7 @@ import { SessionService } from 'src/app/services/session.service';
 })
 
 export class LoginPage implements OnInit {
-  
+
   loadingRegister = false;
   photoPreview: string | null = null;
 
@@ -73,7 +73,7 @@ export class LoginPage implements OnInit {
     { text: 'IBAGUE', value: '005', codDepartament: '25' }
   ];
   valueMunicipality : ItemMunicipality[] = this.valueMunicipalityTotal;
-  
+
   fruitSelectionChanged(fruits: string[]) {
     this.valueMunicipality = this.valueMunicipalityTotal.filter(municipality =>
       fruits.includes(municipality.codDepartament)

@@ -4,6 +4,7 @@ import { IonicModule } from "@ionic/angular";
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { SessionService } from 'src/app/services/session.service';
 import { filter } from 'rxjs/operators';
+import { timer } from 'rxjs';
 import { getAuth } from 'firebase/auth';
 
 @Component({
@@ -71,6 +72,7 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
       const targetLi = anchor.closest('.list') as HTMLElement | null;
       if (targetLi) {
         targetLi.classList.add('active');
+        this.onSoping(false);
       }
     };
 
@@ -80,9 +82,79 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     });
   }
 
+  onSoping(valid) {
+    const host = this.el.nativeElement as HTMLElement;
+
+    const ul = host.querySelector('ul:not([hidden])');
+    if (!ul) return;
+    const items = ul.querySelectorAll('.list') as NodeListOf<HTMLElement>;
+
+    const handler = () => {
+      items.forEach(item => item.classList.remove('active'));
+
+      const anchor = ul.querySelector('.onSoping');
+      const targetLi = anchor.closest('.list') as HTMLElement | null;
+      if (targetLi) {
+        targetLi.classList.add('active');
+        this.onSoping(false);
+      }
+    };
+
+    const navSoping = host.querySelector('.navSoping');
+    const navSoping1 = host.querySelector('.onSoping1');
+    const navSoping2 = host.querySelector('.onSoping2');
+    if (navSoping2 && valid !== false) {
+      handler();
+      navSoping2.classList.toggle('navSopingActive2');
+    }else if (navSoping1 && valid !== false) {
+      handler();
+      navSoping1.classList.toggle('navSopingActive1');
+    }else if (navSoping && valid !== false) {
+      handler();
+      navSoping.classList.toggle('navSopingActive');
+    }else if (navSoping1 && !valid) {
+      navSoping.classList.remove('navSopingActive');
+      navSoping1.classList.remove('navSopingActive1');
+    }else if (navSoping2 && !valid) {
+      navSoping.classList.remove('navSopingActive');
+      navSoping2.classList.remove('navSopingActive2');
+    }else if (navSoping && !valid) {
+      navSoping.classList.remove('navSopingActive');
+    }
+  }
+
   ngOnDestroy(): void {
     this.removeListeners.forEach((off) => off());
     this.removeListeners = [];
     if (this.navSub) this.navSub.unsubscribe();
+  }
+
+
+  async logout() {
+    const host = this.el.nativeElement as HTMLElement;
+
+    const ul = host.querySelector('ul:not([hidden])');
+    if (!ul) return;
+    const items = ul.querySelectorAll('.list') as NodeListOf<HTMLElement>;
+
+    const handler = () => {
+      items.forEach(item => item.classList.remove('active'));
+
+      const anchor = ul.querySelector('.logout');
+      const targetLi = anchor.closest('.list') as HTMLElement | null;
+      if (targetLi) {
+        targetLi.classList.add('active');
+        this.onSoping(false);
+      }
+    };
+    handler();
+    timer(10).subscribe(async () => {
+      await this.session.clearSession();
+      alert('cierras sesión');
+      getAuth().signOut().then(() => {
+        this.router.navigateByUrl('/home', { replaceUrl: true });
+        window.location.reload();
+      });
+    });
   }
 }

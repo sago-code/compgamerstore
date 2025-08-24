@@ -1,13 +1,16 @@
 @import url("https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900");
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+
 :root {
   --clr: #262433;
 }
+
 body {
   display: flex;
   justify-content: center;
@@ -15,10 +18,12 @@ body {
   background: var(--clr);
   min-height: 100vh;
 }
+
 .navigation {
   width: 100%;
   height: 70px;
-  background: var(--ion-color-sextonary); /* Change Navigation Color here */
+  background: var(--ion-color-sextonary);
+  /* Change Navigation Color here */
   position: relative;
   display: flex;
   justify-content: center;
@@ -27,10 +32,12 @@ body {
   overflow: hidden;
   margin-bottom: 10px;
 }
+
 .navigation ul {
   display: flex;
   width: 350px;
 }
+
 .navigation ul li {
   position: relative;
   list-style: none;
@@ -38,6 +45,7 @@ body {
   height: 70px;
   z-index: 1;
 }
+
 .navigation ul li a {
   position: relative;
   display: flex;
@@ -48,6 +56,7 @@ body {
   text-align: center;
   font-weight: 500;
 }
+
 .navigation ul li a .icon {
   position: relative;
   display: block;
@@ -55,13 +64,14 @@ body {
   font-size: 1.5em;
   text-align: center;
   transition: 0.5s;
-  color: #000;
+  color: var(--ion-color-octonary) !important;
   opacity: 0.75;
 }
+
 .navigation ul li.active a .icon {
   transform: translateY(8px);
   opacity: 1;
-  color: var(--ion-color-primary);
+  color: var(--ion-color-primary) !important;
 }
 
 .indicator {
@@ -99,18 +109,23 @@ body {
   box-shadow: -4px 6px 0 2px var(--ion-color-chitonary);
   z-index: -1;
 }
-.navigation ul li:nth-child(2).active ~ .indicator {
+
+.navigation ul li:nth-child(2).active~.indicator {
   transform: translateX(calc(70px * 1));
 }
-.navigation ul li:nth-child(3).active ~ .indicator {
+
+.navigation ul li:nth-child(3).active~.indicator {
   transform: translateX(calc(70px * 2));
 }
-.navigation ul li:nth-child(4).active ~ .indicator {
+
+.navigation ul li:nth-child(4).active~.indicator {
   transform: translateX(calc(70px * 3));
 }
-.navigation ul li:nth-child(5).active ~ .indicator {
+
+.navigation ul li:nth-child(5).active~.indicator {
   transform: translateX(calc(70px * 4));
 }
+
 .indicator span {
   position: absolute;
   bottom: 3px;
@@ -124,3 +139,120 @@ body {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
   transform: scale(0.85);
 }
+
+.navSoping {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  z-index: -60;
+  top: 70px;
+  border-radius: 300px;
+}
+
+.navSopingActive, .navSopingActive1, .navSopingActive2 {
+  z-index: 60;
+}
+.navSoping>ul {
+  display: flex;
+  flex-wrap: nowrap;
+  list-style: none;
+  text-decoration: none;
+  background: var(--ion-color-quaternary);
+  padding: 5px;
+  border-radius: 300px;
+  box-shadow: 3px 3px 6px 0px var(--ion-color-sextonary);
+  overflow: hidden;
+  width: 34px;
+  transition: 300ms;
+  transform: translateY(-44px);
+  opacity: 0;
+}
+
+.onSoping1 ul {
+  transform: translate(-140px, -44px);
+}
+
+.onSoping2 ul {
+  transform: translate(-72px, -44px);
+}
+
+.navSopingActive ul {
+  width: max-content;
+  transition: 300ms;
+  transition-delay: 2ms;
+  interpolate-size: allow-keywords;
+  transform: translateY(0px);
+  opacity: 1;
+}
+
+.navSopingActive1 ul {
+  width: max-content;
+  transition: 300ms;
+  transition-delay: 2ms;
+  interpolate-size: allow-keywords;
+  transform: translate(-140px, 0px);
+  opacity: 1;
+}
+
+
+
+@media (max-width: 410px) {
+  .onSoping1 ul {
+    transform: translate(-125px, -45px);
+  }
+
+  .navSopingActive1 ul {
+    width: max-content;
+    transition: 300ms;
+    transition-delay: 2ms;
+    interpolate-size: allow-keywords;
+    transform: translate(-96px, 0px);
+    opacity: 1;
+  }
+
+}
+
+.navSopingActive2 ul {
+  width: max-content;
+  transition: 300ms;
+  transition-delay: 2ms;
+  interpolate-size: allow-keywords;
+  transform: translate(-72px, 0px);
+  opacity: 1;
+}
+
+.navSoping .list {
+  list-style: none;
+  text-decoration: none;
+  background-color: transparent;
+  border-radius: 20px;
+  transition: 200ms;
+}
+
+.navSoping ul li a .icon {
+  position: relative;
+  display: flex;
+  font-size: 1.5em;
+  text-align: center;
+  transition: 0.5s;
+  color: var(--ion-color-sextonary);
+  opacity: 0.75;
+  align-items: center;
+  height: 24px;
+  flex-wrap: nowrap;
+  transition: 200ms;
+  padding: 0 8px;
+}
+
+.navSoping ul .list:hover {
+  background: var(--ion-color-sextonary);
+  transition: 200ms;
+}
+
+.navSoping ul .list:hover a .icon  {
+  padding: 0 12px;
+  color: var(--ion-color-chitonary);
+  transition: 200ms;
+}
+
