@@ -1,0 +1,35 @@
+.search-button {
+  --background: ar(--ion-toolbar-background, var(--ion-background-color));
+  --background-hover: var(--ion-color-chitonary);
+  --background-activated: var(--ion-color-chitonary);
+  --background-focused: var(--ion-color-chitonary);
+
+  --color: var(--ion-color-sextonary);
+
+  --border-radius: 0px 0px 0px 0px;
+  --border-color: var(--ion-color-chitonary);
+  --border-style: solid;
+  --border-width: 1px;
+  transition: 200ms;
+}
+
+.header-container {
+    display: flex;
+    background: var(--ion-toolbar-background, var(--ion-background-color));
+    align-items: center;
+}
+
+.header-container ion-input {
+    --background: var(--ion-toolbar-background, var(--ion-background-color));
+    --border-radius: 20px;
+    --padding-start: 10px;
+    width: 0%;
+}
+
+.search-active {
+    width: 100%;
+}
+
+.search-active ion-button {
+    display: none !important;
+}

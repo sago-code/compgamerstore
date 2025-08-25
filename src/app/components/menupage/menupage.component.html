@@ -52,7 +52,7 @@
       </a>
     </li>
     <li class="list">
-      <a [routerLink]="['/login']" data-route>
+      <a href="javascript:void(0)" role="button" tabindex="0" (click)="logout()">
         <span class="icon"><ion-icon name="power"></ion-icon></span>
       </a>
     </li>
@@ -89,7 +89,50 @@
     <div class="indicator"><span></span></div>
   </ul>
 </div>
-<div [className]="isAuth && role === 'cliente' ? 'onSoping2 navSoping' : isAuth && role === 'admin' ? 'onSoping1 navSopingActive1 navSoping' : 'navSoping'">
+<!-- Navegación sólo para cliente -->
+<div *ngIf="isAuth && role === 'cliente'" class="onSoping2 navSoping">
+  <ul>
+    <li class="list">
+      <a href="#">
+        <span class="icon"><ion-icon name="laptop-outline"></ion-icon></span>
+      </a>
+    </li>
+    <li class="list">
+      <a href="#">
+        <span class="icon"><ion-icon name="desktop-outline"></ion-icon></span>
+      </a>
+    </li>
+    <li class="list">
+      <a href="#">
+        <span class="icon"><ion-icon name="hardware-chip-outline"></ion-icon></span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- Navegación sólo para admin -->
+<div *ngIf="isAuth && role === 'admin'" class="onSoping1 navSopingActive1 navSoping">
+  <ul>
+    <li class="list">
+      <a [routerLink]="['/products']" [queryParams]="{ type: 'laptop' }" data-route>
+        <span class="icon"><ion-icon name="laptop-outline"></ion-icon></span>
+      </a>
+    </li>
+    <li class="list">
+      <a href="#">
+        <span class="icon"><ion-icon name="desktop-outline"></ion-icon></span>
+      </a>
+    </li>
+    <li class="list">
+      <a href="#">
+        <span class="icon"><ion-icon name="hardware-chip-outline"></ion-icon></span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- Opcional: navegación para otros casos (no auth, otros roles) -->
+<div *ngIf="!isAuth || (role !== 'cliente' && role !== 'admin')" class="navSoping">
   <ul>
     <li class="list">
       <a href="#">
