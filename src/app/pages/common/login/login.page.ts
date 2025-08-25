@@ -40,6 +40,10 @@ export class LoginPage implements OnInit {
     photo: new FormControl(null)
   });
 
+  recoveryPasswordForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email])
+  })
+
   constructor(private firebaseSvc: UserFirebaseService, private router: Router, private session: SessionService) {}
 
   customActionSheetOptions = {
@@ -306,7 +310,9 @@ export class LoginPage implements OnInit {
 
   olvidasteEmail = "";
 
-  async recoverPassword(email: string) {
+  async recoverPassword() {
+    const form = this.recoveryPasswordForm.value as any;
+    const email = form.email;
     if (!email) {
       alert('Introduce tu correo electrónico.');
       return;
