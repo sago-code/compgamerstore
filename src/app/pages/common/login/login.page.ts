@@ -267,7 +267,11 @@ export class LoginPage implements OnInit {
       await this.session.setSession(payload);
 
       alert('Inicio de sesión exitoso');
-      this.router.navigateByUrl('/home', { replaceUrl: true });
+      if(userProfile.role == "admin") {
+        this.router.navigateByUrl('/products', { replaceUrl: true });
+      } else {
+        this.router.navigateByUrl('/home', { replaceUrl: true });
+      }
     } catch (err: any) {
       alert('Error al iniciar sesión: ' + (err?.message || err));
     }
@@ -291,7 +295,11 @@ export class LoginPage implements OnInit {
         };
         await this.session.setSession(sessionPayload);
         alert('Inicio de sesión con Google exitoso');
-        this.router.navigateByUrl('/home', { replaceUrl: true });
+        if(userProfile.role == "admin") {
+          this.router.navigateByUrl('/products', { replaceUrl: true });
+        } else {
+          this.router.navigateByUrl('/home', { replaceUrl: true });
+        }
       } else {
         this.activarLoginForm();
         this.registerForm.patchValue({

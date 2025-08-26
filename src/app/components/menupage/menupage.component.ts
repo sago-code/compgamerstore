@@ -153,7 +153,6 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
       alert('cierras sesión');
       getAuth().signOut().then(() => {
         this.router.navigateByUrl('/home', { replaceUrl: true });
-        window.location.reload();
       });
     });
   }
