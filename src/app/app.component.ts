@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SessionService } from './services/session.service';
 import { UserFirebaseService } from './services/firebase/users/users.service';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { SocialLogin } from '@capgo/capacitor-social-login';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ export class AppComponent implements OnInit {
     private session: SessionService,
     private firebaseSvc: UserFirebaseService,
   ) {}
-  ngOnInit() {
+  async ngOnInit() {
+    await this.initializeGoogle();
      // Mantiene sincronía real con Auth y PVC
     onAuthStateChanged(getAuth(), async user => {
       if (!user) {
@@ -39,6 +41,15 @@ export class AppComponent implements OnInit {
           await this.session.setSession(payload);
         }
       }
+    });
+  }
+
+  private async initializeGoogle() {
+    await SocialLogin.initialize({
+      google: {
+        webClientId: '840480061585-volnvfuoup0in8jbkrg2he59109p1arp.apps.googleusercontent.com',
+        mode: 'online', // 'online' = obtiene ID Token
+      },
     });
   }
 }
