@@ -1,5 +1,5 @@
 .search-button {
-  --background: ar(--ion-toolbar-background, var(--ion-background-color));
+  --background: ar(--ion-color-octonary, var(--ion-color-septonary));
   --background-hover: var(--ion-color-chitonary);
   --background-activated: var(--ion-color-chitonary);
   --background-focused: var(--ion-color-chitonary);
@@ -15,12 +15,12 @@
 
 .header-container {
     display: flex;
-    background: var(--ion-toolbar-background, var(--ion-background-color));
+    background: var(--ion-color-octonary, var(--ion-color-septonary));
     align-items: center;
 }
 
 .header-container ion-input {
-    --background: var(--ion-toolbar-background, var(--ion-background-color));
+    --background: var(--ion-color-octonary, var(--ion-color-septonary));
     --border-radius: 20px;
     --padding-start: 10px;
     width: 0%;

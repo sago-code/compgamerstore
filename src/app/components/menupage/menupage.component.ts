@@ -6,6 +6,7 @@ import { SessionService } from 'src/app/services/session.service';
 import { filter } from 'rxjs/operators';
 import { timer } from 'rxjs';
 import { getAuth } from 'firebase/auth';
+import { LoadingService } from 'src/app/loading-service';
 
 @Component({
   selector: 'app-menupage',
@@ -23,12 +24,14 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
   private navSub: any;
   isAuth = false;
   role: string | null = null;
+  loadingActive = false;
 
   constructor(
     private el: ElementRef<HTMLElement>,
     private renderer: Renderer2,
     private session: SessionService,
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit() {
@@ -38,6 +41,11 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.navSub = this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => this.updateSession());
+
+    this.loadingService.loading$.subscribe(active => {
+      this.loadingActive = active;
+      this.toggleLoading(active);
+    });
   }
 
   async updateSession() {
@@ -155,5 +163,66 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.router.navigateByUrl('/home', { replaceUrl: true });
       });
     });
+  }
+
+  colorInvert() {
+    const root = document.documentElement;
+    //colores claros
+    const primary = getComputedStyle(root).getPropertyValue('--ion-color-primary').trim();
+    const secondary = getComputedStyle(root).getPropertyValue('--ion-color-secondary').trim();
+    const chitonary = getComputedStyle(root).getPropertyValue('--ion-color-chitonary').trim();
+    const denary = getComputedStyle(root).getPropertyValue('--ion-color-denary').trim();
+    const undenary = getComputedStyle(root).getPropertyValue('--ion-color-undenary').trim();
+
+    //colores oscuros
+    const tertiary = getComputedStyle(root).getPropertyValue('--ion-color-tertiary').trim();
+    const quaternary = getComputedStyle(root).getPropertyValue('--ion-color-quaternary').trim();
+    const sextonary = getComputedStyle(root).getPropertyValue('--ion-color-sextonary').trim();
+    const novenary = getComputedStyle(root).getPropertyValue('--ion-color-novenary').trim();
+    const duodenary = getComputedStyle(root).getPropertyValue('--ion-color-duodenary').trim();
+
+    //de claro a oscuro
+    root.style.setProperty('--ion-color-primary', quaternary);
+    root.style.setProperty('--ion-color-secondary', tertiary);
+    root.style.setProperty('--ion-color-chitonary', sextonary);
+    root.style.setProperty('--ion-color-denary', novenary);
+    root.style.setProperty('--ion-color-undenary', duodenary);
+
+    //de oscuro a claro
+    root.style.setProperty('--ion-color-quaternary', primary);
+    root.style.setProperty('--ion-color-tertiary', secondary);
+    root.style.setProperty('--ion-color-sextonary', chitonary);
+    root.style.setProperty('--ion-color-novenary', denary);
+    root.style.setProperty('--ion-color-duodenary', undenary);
+
+    //Extras
+    root.style.setProperty('--ion-color-septonary', sextonary);
+    root.style.setProperty('--ion-color-octonary', denary);
+
+    const items = document.querySelectorAll('.imgLogo') as NodeListOf<HTMLElement>;
+    items.forEach(logo => {
+      if (logo) {
+      // Cambia la ruta de la imagen según el modo
+      const currentSrc = logo.getAttribute('src') || '';
+      console.log(currentSrc);
+      if (currentSrc.includes('logo_dark')) {
+        logo.setAttribute('src', currentSrc.replace('logo_dark', 'logo_light'));
+      } else {
+        logo.setAttribute('src', currentSrc.replace('logo_light', 'logo_dark'));
+      }
+      const currentSrsc = logo.getAttribute('src') || '';
+      console.log(currentSrsc);
+    }
+    });
+  }
+
+  toggleLoading(active: boolean) {
+    const host = this.el.nativeElement as HTMLElement;
+    const ul = host.querySelector('.contain-loading');
+    if (active) {
+      ul?.classList.add('active-loading');
+    } else {
+      ul?.classList.remove('active-loading');
+    }
   }
 }

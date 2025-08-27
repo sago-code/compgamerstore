@@ -1,9 +1,15 @@
+<div class="nameHeader" (click)="colorInvert()">
+  <img src="../../../assets/Logo/logo_light.png" alt="logo" class="imgLogo" />
+  <h2>Comp</h2>
+  <h2>Gamer</h2>
+  <h2>Store</h2>
+</div>
 <!-- Navigation menu at top -->
 <div class="navigation">
   <!-- Estado 1: Sin sesión -->
   <ul *ngIf="!isAuth">
     <li class="list active">
-      <a href="#">
+      <a [routerLink]="['/home']" data-route>
         <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
       </a>
     </li>
@@ -33,7 +39,7 @@
   <!-- Estado 2: Sesión activa - Cliente cliente -->
   <ul *ngIf="isAuth && role === 'cliente'">
     <li class="list active">
-      <a href="#">
+      <a [routerLink]="['/home']" data-route>
         <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
       </a>
     </li>
@@ -151,4 +157,18 @@
     </li>
   </ul>
 </div>
-<div>compgamerstore</div>
+
+<div class="contain-loading">
+  <div class="loading">
+    <div class="loading">
+      <div class="loading">
+        <div class="loading">
+          <div class="loading">
+            <div class="loading">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

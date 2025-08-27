@@ -12,7 +12,7 @@
   display: block;
   max-width: 700px;
   width: 90%;
-  background-color: var(--ion-toolbar-background);
+  background-color: var(--ion-color-octonary);
   padding: 5px;
   border-radius: 20px;
   position: relative;
@@ -109,7 +109,7 @@
   flex-wrap: wrap;
   flex-direction: column;
   align-content: stretch;
-  background-color: var(--ion-toolbar-background);
+  background-color: var(--ion-color-octonary);
   border-radius: 20px;
   position: relative;
   z-index: 1;
@@ -148,7 +148,7 @@
 }
 
 .login-form ion-button button {
-  background-color: var(--ion-toolbar-background) !important;
+  background-color: var(--ion-color-octonary) !important;
   border-radius: 20px !important;
 }
 
@@ -164,7 +164,7 @@
 }
 
 ion-button {
-  --background: var(--ion-color-quaternary);
+  --background: var(--ion-color-duodenary);
   --background-hover: var(--ion-color-chitonary);
   --background-activated: var(--ion-color-chitonary);
   --background-focused: var(--ion-color-chitonary);
@@ -172,7 +172,7 @@ ion-button {
   --color: var(--ion-color-sextonary);
 
   --border-radius: 0px 0px 0px 0px;
-  --border-color: var(--ion-color-chitonary);
+  --border-color: var(--ion-color-duodenary);
   --border-style: solid;
   --border-width: 1px;
   transition: 200ms;
@@ -192,7 +192,7 @@ ion-button {
   flex-wrap: wrap;
   flex-direction: row;
   align-content: stretch;
-  background-color: var(--ion-toolbar-background);
+  background-color: var(--ion-color-octonary);
   border-radius: 20px;
   position: relative;
   z-index: 1;
@@ -220,7 +220,7 @@ ion-button {
   flex-wrap: wrap;
   flex-direction: column;
   align-content: stretch;
-  background-color: var(--ion-toolbar-background);
+  background-color: var(--ion-color-octonary);
   border-radius: 20px;
   position: relative;
   z-index: 1;
@@ -242,7 +242,7 @@ ion-button {
 }
 
 .register-form ion-button button {
-  background-color: var(--ion-toolbar-background) !important;
+  background-color: var(--ion-color-octonary) !important;
   width: 10% !important;
 }
 

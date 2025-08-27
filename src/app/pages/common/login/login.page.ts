@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserFirebaseService } from 'src/app/services/firebase/users/users.service';
 import { Router } from '@angular/router';
 import { SessionService } from 'src/app/services/session.service';
+import { LoadingService } from 'src/app/loading-service';
 
 @Component({
   selector: 'app-login',
@@ -44,7 +45,12 @@ export class LoginPage implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email])
   })
 
-  constructor(private firebaseSvc: UserFirebaseService, private router: Router, private session: SessionService) {}
+  constructor(
+    private firebaseSvc: UserFirebaseService,
+    private router: Router,
+    private session: SessionService,
+    private loadingService: LoadingService // <--- agrega esto
+  ) {}
 
   customActionSheetOptions = {
     header: 'Tipo de documento',
@@ -279,6 +285,7 @@ export class LoginPage implements OnInit {
 
   async loginWithGoogle() {
     try {
+      this.loadingService.show(); // <--- muestra loading
       const result = await this.firebaseSvc.loginWithGoogle();
       if (result.exists) {
         // Trae el doc Firestore con el role
@@ -313,6 +320,8 @@ export class LoginPage implements OnInit {
       }
     } catch (err: any) {
       alert('Error de autenticación con Google: ' + (err?.message || err));
+    } finally {
+      this.loadingService.hide(); // <--- oculta loading
     }
   }
 
