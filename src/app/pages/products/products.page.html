@@ -2,16 +2,18 @@
   <app-menupage></app-menupage>
   <div #header class="header-container" [class.search-active]="searchActive">
     <ion-toolbar>
-      <ion-title>products</ion-title>
+      <ion-title>{{ pageTitle }}</ion-title>
     </ion-toolbar>
-    <ion-button 
-      id="search-button" 
-      class="search-button" 
-      (click)="activarBusqueda()" 
+
+    <ion-button
+      id="search-button"
+      class="search-button"
+      (click)="activarBusqueda()"
       slot="end"
       type="button">
       <ion-icon name="search-outline"></ion-icon>
     </ion-button>
+
     <ion-input
       #searchInput
       id="search-input"
@@ -21,7 +23,7 @@
       [class.active]="searchActive"
       [style.width]="searchActive ? '100%' : '0'"
       [attr.tabindex]="searchActive ? 0 : -1"
-      [readonly]="!searchActive" 
+      [readonly]="!searchActive"
       [autofocus]="searchActive">
       <ion-icon name="search-outline" slot="start"></ion-icon>
     </ion-input>
@@ -29,22 +31,61 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div>
-    <ion-button>Añadir producto</ion-button>
+  <div class="px-4 py-3">
+    <ion-button (click)="navigateToCreate()">
+      Añadir producto
+    </ion-button>
   </div>
+
+  <!-- Estado vacío -->
+  <div *ngIf="products.length === 0" class="ion-text-center ion-padding">
+    <ion-icon name="cube-outline" style="font-size: 48px;"></ion-icon>
+    <p>No hay productos para mostrar.</p>
+  </div>
+
   <div class="container-products">
     <ion-card *ngFor="let product of products" class="product-card">
-      <img [src]="product.imageUrl" alt="Product Image" class="product-image"/>
+      <!-- Imagen (acepta base64 o URL). Fallback si viene vacío -->
+      <img
+        [src]="product.product_image || 'assets/placeholder-product.png'"
+        alt="Product Image"
+        class="product-image" />
+
       <ion-card-header>
-        <ion-card-title>{{ product.product_name }}</ion-card-title>
-        <ion-card-subtitle>{{ product.category }} - {{ product.subcategory }}</ion-card-subtitle>
+        <ion-card-title class="ion-text-capitalize">
+          {{ product.product_name }}
+        </ion-card-title>
+
+        <!-- Muestra categoría/subcategoría si existen -->
+        <!-- <ion-card-subtitle *ngIf="product.category || product.subcategory">
+          {{ product.category || '—' }}<ng-container *ngIf="product.subcategory"> - {{ product.subcategory }}</ng-container>
+        </ion-card-subtitle> -->
+
+        <!-- Badge con el tipo -->
+        <ion-badge *ngIf="product.type" color="medium">{{ product.type | titlecase }}</ion-badge>
       </ion-card-header>
+
       <ion-card-content>
-        <p>{{ product.description }}</p>
-        <p>Price: {{ product.price | currency }}</p>
+        <p *ngIf="product.description">{{ product.description }}</p>
+        <p *ngIf="product.price !== undefined">Precio: {{ product.price | currency }}</p>
       </ion-card-content>
-      <ion-button expand="full" color="primary">Edit</ion-button>
-      <ion-button expand="full" color="danger">Delete</ion-button>
+
+      <!-- Edit manda id + type para que el form sepa qué renderizar -->
+      <ion-button expand="full" color="primary" (click)="editProduct(product)">
+        Edit
+      </ion-button>
+
+      <ion-button
+        expand="full"
+        color="secondary"
+        [routerLink]="['/products/viewproduct']"
+        [queryParams]="{ id: product.uid, type: product.type }">
+        Desactivar
+      </ion-button>
+
+      <ion-button expand="full" color="danger">
+        Eliminar
+      </ion-button>
     </ion-card>
   </div>
 </ion-content>

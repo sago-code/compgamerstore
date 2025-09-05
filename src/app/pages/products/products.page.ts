@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnDestroy, Renderer2, ViewChild, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonInput } from '@ionic/angular';
+import { ProductsService } from '../../services/firebase/products/products.service';
+import { Product } from 'src/app/models/product.model';
 
 @Component({
   selector: 'app-products',
@@ -8,63 +10,78 @@ import { IonInput } from '@ionic/angular';
   styleUrls: ['./products.page.scss'],
   standalone: false
 })
-export class ProductsPage implements OnDestroy, OnInit {
+export class ProductsPage implements OnInit, OnDestroy {
   searchActive = false;
+  pageTitle = 'Productos';
   private removeClickListener: (() => void) | null = null;
 
   @ViewChild('searchInput', { read: IonInput }) searchInput!: IonInput;
   @ViewChild('header') headerRef!: ElementRef<HTMLElement>;
-  products: any[] = [];      // Los productos visibles en la UI
-  allProducts: any[] = [];   // Todos los productos (base sin filtro)
+
+  products: Product[] = [];
+  allProducts: Product[] = [];
+  currentType: string | null = null;
 
   constructor(
     private renderer: Renderer2,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private productsService: ProductsService
   ) {}
 
   ngOnInit() {
-    // Carga todos los productos al iniciar (de tu servicio, Firestore, etc.)
+    // 1. Cargo productos apenas entro
     this.loadProducts();
 
-    // Escucha los cambios de los query params (?type=)
+    // 2. Escucho cambios en queryParams y filtro
     this.route.queryParams.subscribe(params => {
-      const type = params['type'];
-      if (type && this.allProducts.length) {
-        this.products = this.allProducts.filter(p => p.type === type);
-      } else {
-        this.products = [...this.allProducts];
+      this.currentType = params['type'] || null;
+      this.applyFilter();
+    });
+  }
+
+  async loadProducts() {
+    try {
+      this.allProducts = await this.productsService.getProducts();
+      this.applyFilter(); // aplico filtro apenas termine la carga
+    } catch (error) {
+      console.error('Error cargando productos:', error);
+    }
+  }
+
+  applyFilter() {
+    if (this.currentType) {
+      this.products = this.allProducts.filter(p => p.type === this.currentType);
+      this.pageTitle = `Productos - ${this.capitalize(this.currentType)}`;
+    } else {
+      this.products = [...this.allProducts];
+      this.pageTitle = 'Productos';
+    }
+  }
+
+  capitalize(word: string): string {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  navigateToCreate() {
+    this.router.navigate(['/products/formproduct'], {
+      queryParams: {
+        mode: 'create',
+        type: this.currentType || 'general'
       }
     });
   }
 
-  // Simulación: reemplaza esto por tu método real para traer productos
-  loadProducts() {
-    // Aquí debes usar tu servicio de Firestore para traer todo
-    this.allProducts = [
-      { product_name: 'Laptop ABC', type: 'laptop', category: 'Electronics', subcategory: 'Laptops', price: 1000, description: '', imageUrl: '' },
-      { product_name: 'Desktop XYZ', type: 'desktop', category: 'Electronics', subcategory: 'Desktops', price: 1200, description: '', imageUrl: '' }
-      // ...
-    ];
-    this.products = [...this.allProducts];
-  }
-
   activarBusqueda() {
     this.searchActive = !this.searchActive;
-
     if (this.searchActive) {
-      // Espera hasta el próximo ciclo para asegurar que el input ya está visible/renderizado
       setTimeout(async () => {
-        // IonInput expone getInputElement() que retorna una Promise del input nativo
         const nativeInput = await this.searchInput.getInputElement();
         nativeInput.focus();
       });
 
-      // Agrega listener al documento para cierre por click fuera
       this.removeClickListener = this.renderer.listen('document', 'mousedown', (event) => {
-        if (
-          this.headerRef &&
-          !this.headerRef.nativeElement.contains(event.target as Node)
-        ) {
+        if (this.headerRef && !this.headerRef.nativeElement.contains(event.target as Node)) {
           this.cerrarBusqueda();
         }
       });
@@ -75,7 +92,6 @@ export class ProductsPage implements OnDestroy, OnInit {
 
   cerrarBusqueda() {
     this.searchActive = false;
-    // Limpia el contenido del input
     setTimeout(async () => {
       if (this.searchInput) {
         this.searchInput.value = '';
@@ -84,7 +100,6 @@ export class ProductsPage implements OnDestroy, OnInit {
       }
     }, 0);
 
-    // Remueve el listener de clicks externos si existe
     if (this.removeClickListener) {
       this.removeClickListener();
       this.removeClickListener = null;
@@ -95,5 +110,13 @@ export class ProductsPage implements OnDestroy, OnInit {
     if (this.removeClickListener) {
       this.removeClickListener();
     }
+  }
+
+  editProduct(product: any) {
+    this.router.navigateByUrl('/products/formproduct', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/products/formproduct'], {
+        queryParams: { mode: 'edit', uid: product.uid, type: product.type }
+      });
+    });
   }
 }
