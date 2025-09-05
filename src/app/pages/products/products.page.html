@@ -56,10 +56,13 @@
           {{ product.product_name }}
         </ion-card-title>
 
-        <!-- Muestra categoría/subcategoría si existen -->
-        <!-- <ion-card-subtitle *ngIf="product.category || product.subcategory">
-          {{ product.category || '—' }}<ng-container *ngIf="product.subcategory"> - {{ product.subcategory }}</ng-container>
-        </ion-card-subtitle> -->
+        <!-- Muestra categoría/subcategoría solo si es HardwareProduct -->
+        <ion-card-subtitle *ngIf="isHardware(product)">
+          {{ product.category || '—' }}
+          <ng-container *ngIf="product.subcategory">
+            - {{ product.subcategory }}
+          </ng-container>
+        </ion-card-subtitle>
 
         <!-- Badge con el tipo -->
         <ion-badge *ngIf="product.type" color="medium">{{ product.type | titlecase }}</ion-badge>

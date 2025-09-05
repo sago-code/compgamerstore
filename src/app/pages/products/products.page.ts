@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, Renderer2, ViewChild, OnInit } from '
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonInput } from '@ionic/angular';
 import { ProductsService } from '../../services/firebase/products/products.service';
-import { Product } from 'src/app/models/product.model';
+import { HardwareProduct, Product } from 'src/app/models/product.model';
 
 @Component({
   selector: 'app-products',
@@ -118,5 +118,9 @@ export class ProductsPage implements OnInit, OnDestroy {
         queryParams: { mode: 'edit', uid: product.uid, type: product.type }
       });
     });
+  }
+
+  isHardware(p: Product): p is HardwareProduct {
+    return p.type === 'hardware';
   }
 }
