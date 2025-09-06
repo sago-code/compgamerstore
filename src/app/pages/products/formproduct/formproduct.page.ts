@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ProductsService } from 'src/app/services/firebase/products/products.service';
-import { DesktopProduct, LaptopProduct, Product } from 'src/app/models/product.model';
+import { DesktopProduct, HardwareProduct, LaptopProduct, Product } from 'src/app/models/product.model';
 import imageCompression from 'browser-image-compression';
 
 @Component({
@@ -71,6 +71,10 @@ export class FormproductPage implements OnInit {
 
   isLaptop(p: Product): p is LaptopProduct {
     return p.type === 'laptop';
+  }
+
+  isHardware(p: Product): p is HardwareProduct {
+    return p.type === 'hardware';
   }
 
   async onPhotoSelected(event: Event) {

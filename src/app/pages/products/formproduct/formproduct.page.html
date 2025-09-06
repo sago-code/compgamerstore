@@ -8,6 +8,7 @@
 <ion-content [fullscreen]="true">
   <form (ngSubmit)="saveProduct()">
 
+    <!-- Imagen -->
     <div class="register-avatar">
       <ion-label>Imagen de producto</ion-label>
       <label class="avatar" for="photoInput">
@@ -97,7 +98,36 @@
       </ion-item>
     </ng-container>
 
+    <!-- Campos Hardware -->
+    <ng-container *ngIf="isHardware(product)">
+      <ion-item>
+        <ion-label position="floating">Categoría</ion-label>
+        <ion-input [(ngModel)]="product.category" name="hardware_category" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Subcategoría</ion-label>
+        <ion-input [(ngModel)]="product.subcategory" name="hardware_subcategory" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Marca</ion-label>
+        <ion-input [(ngModel)]="product.brand" name="hardware_brand" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Modelo</ion-label>
+        <ion-input [(ngModel)]="product.model" name="hardware_model" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Color</ion-label>
+        <ion-input [(ngModel)]="product.color" name="hardware_color" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Dimensiones</ion-label>
+        <ion-input [(ngModel)]="product.dimensions" name="hardware_dimensions" type="text"></ion-input>
+      </ion-item>
+    </ng-container>
+
     <!-- Botón -->
     <ion-button expand="full" type="submit">Guardar</ion-button>
   </form>
 </ion-content>
+
