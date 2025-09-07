@@ -38,6 +38,12 @@
       <ion-input [(ngModel)]="product.price" name="price" type="number" required></ion-input>
     </ion-item>
 
+  <!-- Stock -->
+  <ion-item>
+    <ion-label position="floating">Stock</ion-label>
+    <ion-input [(ngModel)]="product.stock" name="stock" type="number" required></ion-input>
+  </ion-item>
+
     <!-- Campos Desktop -->
     <ng-container *ngIf="isDesktop(product)">
       <ion-item>
