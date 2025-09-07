@@ -1,4 +1,5 @@
 <ion-header [translucent]="true">
+  <app-menupage></app-menupage>
   <ion-toolbar>
     <ion-title>Login</ion-title>
   </ion-toolbar>
@@ -10,9 +11,9 @@
       <div class="transision"></div>
       <!-- Formulario para realizar el logeo -->
       <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
-        <ion-img src="../../../../assets/Logo/logo_light.png" alt="Logotipo" class="logo"></ion-img>
+        <ion-img src="../../../../assets/Logo/logo_light.png" alt="Logotipo" class="logo imgLogo"></ion-img>
         <ion-item>
-          <ion-label position="floating" id="emailLabel" class="emailLabel">Email o nombre de usuario</ion-label>
+          <ion-label position="floating" id="emailLabel" class="emailLabel">Email</ion-label>
           <ion-input type="email" id="emailInput" class="emailInput" required formControlName="email"></ion-input>
         </ion-item>
         <ion-item>
@@ -20,7 +21,7 @@
           <ion-input type="password" required formControlName="password"></ion-input>
         </ion-item>
         <p class="olvidaste-contrasena" (click)="activarOlvidasteContrasenaForm()">¿Olvidaste tu contraseña?</p>
-        <ion-button expand="full" type="submit" shape="round">Login</ion-button>
+        <ion-button expand="full" type="submit" shape="round" [disabled]="!loginForm.valid" class="btn-login">Login</ion-button>
         <ion-button expand="full" type="button" shape="round" (click)="loginWithGoogle()">
           <ion-icon name="logo-google"></ion-icon>
             Iniciar Sesión con Google
@@ -132,19 +133,19 @@
         <!-- Campo oculto para el rol (por defecto admin) -->
         <input type="hidden" formControlName="role" value="admin" />
         <div class="button-register">
-          <ion-button expand="full" type="submit" shape="round" [disabled]="loadingRegister">Registrarse</ion-button>
+          <ion-button expand="full" type="submit" shape="round" [disabled]="!registerForm.valid">Registrarse</ion-button>
           <ion-button expand="full" type="button" shape="round" class="clancelar" (click)="activarLoginForm()">cancelar</ion-button>
         </div>
       </form>
       <!-- Formulario para recuperar contraseña -->
-      <form class="olvidaste-contrasena-form" (ngSubmit)="recoverPassword(olvidasteEmail)">
+      <form class="olvidaste-contrasena-form" [formGroup]="recoveryPasswordForm"   (ngSubmit)="recoverPassword()">
         <ion-item>
           <ion-label position="floating">Email</ion-label>
-          <ion-input type="email" required [(ngModel)]="olvidasteEmail"></ion-input>
+          <ion-input type="email" required></ion-input>
         </ion-item>
-        <ion-button expand="full" type="submit" shape="round">Recuperar contraseña</ion-button>
+        <ion-button expand="full" type="submit" shape="round" [disabled]="!recoveryPasswordForm.valid">Recuperar contraseña</ion-button>
         <ion-button expand="full" type="button" shape="round" class="clancelar" (click)="activarOlvidasteContrasenaForm()">cancelar</ion-button>
-      </form> 
+      </form>
     </div>
   </div>
 </ion-content>

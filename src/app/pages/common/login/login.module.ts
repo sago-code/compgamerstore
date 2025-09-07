@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoginPage } from './login.page';
 import { LoginPageRoutingModule } from './login-routing.module';
 import { HttpClientModule } from '@angular/common/http';
+import { MenupageComponent } from "src/app/components/menupage/menupage.component";
 
 
 @NgModule({
@@ -15,8 +16,9 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     IonicModule,
     LoginPageRoutingModule,
-    HttpClientModule
-  ],
+    HttpClientModule,
+    MenupageComponent
+],
   declarations: [LoginPage]
 })
 export class LoginPageModule {}

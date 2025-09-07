@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FirebaseService } from 'src/app/services/firebase/users/users.service';
+import { UserFirebaseService } from 'src/app/services/firebase/users/users.service';
 import { Router } from '@angular/router';
 import { SessionService } from 'src/app/services/session.service';
+import { LoadingService } from 'src/app/loading-service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import { SessionService } from 'src/app/services/session.service';
 })
 
 export class LoginPage implements OnInit {
-  
+
   loadingRegister = false;
   photoPreview: string | null = null;
 
@@ -40,7 +41,16 @@ export class LoginPage implements OnInit {
     photo: new FormControl(null)
   });
 
-  constructor(private firebaseSvc: FirebaseService, private router: Router, private session: SessionService) {}
+  recoveryPasswordForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email])
+  })
+
+  constructor(
+    private firebaseSvc: UserFirebaseService,
+    private router: Router,
+    private session: SessionService,
+    private loadingService: LoadingService // <--- agrega esto
+  ) {}
 
   customActionSheetOptions = {
     header: 'Tipo de documento',
@@ -73,7 +83,7 @@ export class LoginPage implements OnInit {
     { text: 'IBAGUE', value: '005', codDepartament: '25' }
   ];
   valueMunicipality : ItemMunicipality[] = this.valueMunicipalityTotal;
-  
+
   fruitSelectionChanged(fruits: string[]) {
     this.valueMunicipality = this.valueMunicipalityTotal.filter(municipality =>
       fruits.includes(municipality.codDepartament)
@@ -263,7 +273,11 @@ export class LoginPage implements OnInit {
       await this.session.setSession(payload);
 
       alert('Inicio de sesión exitoso');
-      this.router.navigateByUrl('/home', { replaceUrl: true });
+      if(userProfile.role == "admin") {
+        this.router.navigateByUrl('/products', { replaceUrl: true });
+      } else {
+        this.router.navigateByUrl('/home', { replaceUrl: true });
+      }
     } catch (err: any) {
       alert('Error al iniciar sesión: ' + (err?.message || err));
     }
@@ -271,6 +285,7 @@ export class LoginPage implements OnInit {
 
   async loginWithGoogle() {
     try {
+      this.loadingService.show(); // <--- muestra loading
       const result = await this.firebaseSvc.loginWithGoogle();
       if (result.exists) {
         // Trae el doc Firestore con el role
@@ -287,7 +302,11 @@ export class LoginPage implements OnInit {
         };
         await this.session.setSession(sessionPayload);
         alert('Inicio de sesión con Google exitoso');
-        this.router.navigateByUrl('/home', { replaceUrl: true });
+        if(userProfile.role == "admin") {
+          this.router.navigateByUrl('/products', { replaceUrl: true });
+        } else {
+          this.router.navigateByUrl('/home', { replaceUrl: true });
+        }
       } else {
         this.activarLoginForm();
         this.registerForm.patchValue({
@@ -301,12 +320,16 @@ export class LoginPage implements OnInit {
       }
     } catch (err: any) {
       alert('Error de autenticación con Google: ' + (err?.message || err));
+    } finally {
+      this.loadingService.hide(); // <--- oculta loading
     }
   }
 
   olvidasteEmail = "";
 
-  async recoverPassword(email: string) {
+  async recoverPassword() {
+    const form = this.recoveryPasswordForm.value as any;
+    const email = form.email;
     if (!email) {
       alert('Introduce tu correo electrónico.');
       return;

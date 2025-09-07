@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">compgamerstore</string>
+    <string name="title_activity_main">compgamerstore</string>
+    <string name="package_name">com.idiottecnology.compgamerstore</string>
+    <string name="custom_url_scheme">com.idiottecnology.compgamerstore</string>
+</resources>

@@ -10,34 +10,20 @@
   --ion-color-quaternary: #064277;
   --ion-color-chitonary: #0d151b;
   --ion-color-sextonary: #ececec;
+  --ion-color-septonary: var(--ion-background-color);
+  --ion-color-octonary: var(--ion-toolbar-background);
+  --ion-color-novenary: #1a1a1a;
+  --ion-color-denary: #a8a8a8;
+  --ion-color-undenary: #26acc4;
+  --ion-color-duodenary: #0a4b85;
   // Add more colors as needed
 }
 
-.btn-primary button {
-  background-color: var(--ion-color-primary) !important;
-  color: var(--ion-color-quaternary) !important;
-  font-weight: bold !important;
-}
-.btn-secondary {
-  background-color: var(--ion-color-secondary) !important;
+html, body, ion-app, ion-content, ion-toolbar, ion-header, :host, .container{
+  background-color: var(--ion-color-septonary) !important;
   color: var(--ion-color-sextonary) !important;
-  font-weight: bold !important;
+  --background: var(--ion-color-septonary) !important;
+  --color: var(--ion-color-sextonary) !important;
 }
-.btn-tertiary {
-  background-color: var(--ion-color-tertiary) !important;
-  color: var(--ion-color-sextonary) !important;
-  font-weight: bold !important;
-}
-.btn-quaternary {
-  background-color: var(--ion-color-quaternary) !important;
-  color: var(--ion-color-sextonary) !important;
-  font-weight: bold !important;
-}
-.btn-chitonary {
-  box-shadow: #064277 10px 10px 20px -10px;
-}
-#btn-chitonary button {
-  background-color: var(--ion-color-chitonary) !important;
-  color: var(--ion-color-sextonary) !important;
-  font-weight: bold !important;
-}
+
+

@@ -1,0 +1,139 @@
+<ion-header [translucent]="true">
+  <app-menupage></app-menupage>
+  <ion-toolbar>
+    <ion-title>{{ pageTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form (ngSubmit)="saveProduct()">
+
+    <!-- Imagen -->
+    <div class="register-avatar">
+      <ion-label>Imagen de producto</ion-label>
+      <label class="avatar" for="photoInput">
+        <img *ngIf="product?.product_image; else avatarPlaceholder" [src]="product.product_image" alt="Foto de producto" />
+        <ng-template #avatarPlaceholder>
+          <ion-icon name="person-circle-outline"></ion-icon>
+        </ng-template>
+        <input id="photoInput" type="file" accept="image/*" (change)="onPhotoSelected($event)" hidden />
+      </label>
+    </div>
+
+    <!-- Nombre -->
+    <ion-item>
+      <ion-label position="floating">Nombre del producto</ion-label>
+      <ion-input [(ngModel)]="product.product_name" name="product_name" type="text" required></ion-input>
+    </ion-item>
+
+    <!-- Descripción -->
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea [(ngModel)]="product.description" name="description" required></ion-textarea>
+    </ion-item>
+
+    <!-- Precio -->
+    <ion-item>
+      <ion-label position="floating">Precio</ion-label>
+      <ion-input [(ngModel)]="product.price" name="price" type="number" required></ion-input>
+    </ion-item>
+
+  <!-- Stock -->
+  <ion-item>
+    <ion-label position="floating">Stock</ion-label>
+    <ion-input [(ngModel)]="product.stock" name="stock" type="number" required></ion-input>
+  </ion-item>
+
+    <!-- Campos Desktop -->
+    <ng-container *ngIf="isDesktop(product)">
+      <ion-item>
+        <ion-label position="floating">Procesador</ion-label>
+        <ion-input [(ngModel)]="product.processor" name="desktop_processor" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">RAM</ion-label>
+        <ion-input [(ngModel)]="product.ram" name="desktop_ram" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Almacenamiento</ion-label>
+        <ion-input [(ngModel)]="product.storage" name="desktop_storage" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Gráfica</ion-label>
+        <ion-input [(ngModel)]="product.graphics" name="desktop_graphics" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Placa base</ion-label>
+        <ion-input [(ngModel)]="product.motherboard" name="desktop_motherboard" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Fuente de poder</ion-label>
+        <ion-input [(ngModel)]="product.power_supply" name="desktop_power_supply" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Case</ion-label>
+        <ion-input [(ngModel)]="product.case" name="desktop_case" type="text"></ion-input>
+      </ion-item>
+    </ng-container>
+
+    <!-- Campos Laptop -->
+    <ng-container *ngIf="isLaptop(product)">
+      <ion-item>
+        <ion-label position="floating">Procesador</ion-label>
+        <ion-input [(ngModel)]="product.processor" name="laptop_processor" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">RAM</ion-label>
+        <ion-input [(ngModel)]="product.ram" name="laptop_ram" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Almacenamiento</ion-label>
+        <ion-input [(ngModel)]="product.storage" name="laptop_storage" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Gráfica</ion-label>
+        <ion-input [(ngModel)]="product.graphics" name="laptop_graphics" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Batería</ion-label>
+        <ion-input [(ngModel)]="product.battery" name="laptop_battery" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Peso</ion-label>
+        <ion-input [(ngModel)]="product.weight" name="laptop_weight" type="text"></ion-input>
+      </ion-item>
+    </ng-container>
+
+    <!-- Campos Hardware -->
+    <ng-container *ngIf="isHardware(product)">
+      <ion-item>
+        <ion-label position="floating">Categoría</ion-label>
+        <ion-input [(ngModel)]="product.category" name="hardware_category" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Subcategoría</ion-label>
+        <ion-input [(ngModel)]="product.subcategory" name="hardware_subcategory" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Marca</ion-label>
+        <ion-input [(ngModel)]="product.brand" name="hardware_brand" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Modelo</ion-label>
+        <ion-input [(ngModel)]="product.model" name="hardware_model" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Color</ion-label>
+        <ion-input [(ngModel)]="product.color" name="hardware_color" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Dimensiones</ion-label>
+        <ion-input [(ngModel)]="product.dimensions" name="hardware_dimensions" type="text"></ion-input>
+      </ion-item>
+    </ng-container>
+
+    <!-- Botón -->
+    <ion-button expand="full" type="submit">Guardar</ion-button>
+  </form>
+</ion-content>
+

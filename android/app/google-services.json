@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "840480061585",
+    "project_id": "compgamerstore",
+    "storage_bucket": "compgamerstore.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840480061585:android:fccac995ce867fa8512730",
+        "android_client_info": {
+          "package_name": "com.idiottecnology.compgamerstore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840480061585-uc09i36dphninhboglms7j5h65dbpjd1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.idiottecnology.compgamerstore",
+            "certificate_hash": "b8c8cf34eb1002bb52ca1839a7f1e4fbc7afb342"
+          }
+        },
+        {
+          "client_id": "840480061585-volnvfuoup0in8jbkrg2he59109p1arp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8vZfRquIiciJ_OnZ9X9qvSX5J7JF2LGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840480061585-volnvfuoup0in8jbkrg2he59109p1arp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "840480061585-71s9v9ng34na3ll2q140ll8vlgjbrul3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.idiottecnology.compgamerstore"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

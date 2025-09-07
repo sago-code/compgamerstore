@@ -1,12 +1,33 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, getIdToken, Auth, GoogleAuthProvider, UserCredential, signInWithPopup, sendPasswordResetEmail } from 'firebase/auth';
-import { getFirestore, Firestore, doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  getIdToken,
+  Auth,
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithCredential
+} from 'firebase/auth';
+import {
+  getFirestore,
+  Firestore,
+  doc,
+  setDoc,
+  serverTimestamp,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs
+} from 'firebase/firestore';
 import { User } from '../../../models/user.model';
+import { SocialLogin } from '@capgo/capacitor-social-login';
 
 @Injectable({ providedIn: 'root' })
-export class FirebaseService {
+export class UserFirebaseService {
   private app: FirebaseApp;
   private auth: Auth;
   private db: Firestore;
@@ -15,6 +36,7 @@ export class FirebaseService {
     // Inicializar Firebase una sola vez usando el SDK modular (sin AngularFire)
     this.app = getApps().length ? getApp() : initializeApp(environment.firebase);
     this.auth = getAuth(this.app);
+    this.auth.languageCode = 'es';
     this.db = getFirestore(this.app);
   }
 
@@ -55,49 +77,57 @@ export class FirebaseService {
     return { uid, token, email: cred.user?.email || email };
   }
 
+  // Login con Google usando SocialLogin
   async loginWithGoogle(): Promise<
     | { exists: true; session: any }
     | { exists: false; session: any }
   > {
-    const provider = new GoogleAuthProvider();
-    const cred: UserCredential = await signInWithPopup(this.auth, provider);
-    const user = cred.user;
-    const uid = user.uid;
-    const token = await user.getIdToken();
+    // 🔹 Login con Google (Capacitor Social Login)
+    const res: any = await SocialLogin.login({
+      provider: 'google',
+      options: { scopes: ['profile', 'email'], forceRefreshToken: true },
+    });
 
-    // Checa si existe en Firestore
-    const userDocRef = doc(this.db, 'users', uid);
-    const userSnap = await getDoc(userDocRef);
+    const idToken = res?.result?.idToken;
+    const accessToken = res?.result?.accessToken;
+    const profile = res?.result?.profile || {};
+    const email = profile?.email || res?.result?.email || '';
 
-    // Prepara datos del usuario de Google
-    let first_name = '', last_name = '';
-    if (user.displayName) {
-      const parts = user.displayName.split(' ');
-      first_name = parts[0];
-      last_name = parts.slice(1).join(' ');
+    if (!idToken && !accessToken) {
+      throw new Error('No se obtuvo token de Google');
     }
 
+    // Se crea el credencial en Firebase y autenticar (esto crea el usuario en Auth si no existe)
+    const credential = GoogleAuthProvider.credential(idToken, accessToken);
+    const userCred = await signInWithCredential(this.auth, credential);
+
+    const firebaseUser = userCred.user;
+    const token = await getIdToken(firebaseUser, true);
+
+    // Verifica si ya existe en Firestore (colección users)
+    const usersRef = collection(this.db, 'users');
+    const q = query(usersRef, where('email', '==', email));
+    const querySnap = await getDocs(q);
+
+    const exists = !querySnap.empty;
     const sessionData = {
-      uid,
-      email: user.email || '',
+      uid: firebaseUser.uid,
+      email: firebaseUser.email,
       token,
-      photo: user.photoURL || '',
-      first_name,
-      last_name
+      photo: firebaseUser.photoURL,
+      name: firebaseUser.displayName,
     };
 
-    if (userSnap.exists()) {
-      // Usuario ya existe, loguea directamente
-      return { exists: true, session: { ...sessionData || undefined } };
+    if (exists) {
+      return { exists: true, session: sessionData };
     } else {
-      // Usuario nuevo, redirige al registro
       return { exists: false, session: sessionData };
     }
   }
 
   async sendPasswordReset(email: string): Promise<void> {
     await sendPasswordResetEmail(this.auth, email);
-}
+  }
 
   async getUserProfile(uid: string): Promise<User | null> {
     const userDoc = await getDoc(doc(this.db, 'users', uid));
@@ -105,3 +135,4 @@ export class FirebaseService {
     return null;
   }
 }
+

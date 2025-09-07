@@ -1,0 +1,87 @@
+<ion-header [translucent]="true">
+  <app-menupage></app-menupage>
+  <div #header class="header-container" [class.search-active]="searchActive">
+    <ion-toolbar>
+      <ion-title>{{ pageTitle }}</ion-title>
+    </ion-toolbar>
+
+    <ion-button
+      id="search-button"
+      class="search-button"
+      (click)="activarBusqueda()"
+      slot="end"
+      type="button">
+      <ion-icon name="search-outline"></ion-icon>
+    </ion-button>
+
+    <ion-input
+      #searchInput
+      id="search-input"
+      class="search-input"
+      type="text"
+      placeholder="Buscar producto"
+      [class.active]="searchActive"
+      [style.width]="searchActive ? '100%' : '0'"
+      [attr.tabindex]="searchActive ? 0 : -1"
+      [readonly]="!searchActive"
+      [autofocus]="searchActive">
+      <ion-icon name="search-outline" slot="start"></ion-icon>
+    </ion-input>
+  </div>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="px-4 py-3">
+    <ion-button (click)="navigateToCreate()">
+      Añadir producto
+    </ion-button>
+  </div>
+
+  <!-- Estado vacío -->
+  <div *ngIf="products.length === 0" class="ion-text-center ion-padding">
+    <ion-icon name="cube-outline" style="font-size: 48px;"></ion-icon>
+    <p>No hay productos para mostrar.</p>
+  </div>
+
+  <div class="container-products">
+    <table class="table table-striped table-container">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Imagen</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Precio</th>
+        <th scope="col">Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td>
+            <img
+              [src]="product.product_image || 'assets/placeholder-product.png'"
+              alt="Product Image"
+              class="product-image" />
+          </td>
+          <td>{{ product.product_name }}</td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.price | currency }}</td>
+          <td>
+            <ion-button expand="full" color="primary" (click)="editProduct(product)">
+              Edit
+            </ion-button>
+            <ion-button
+              expand="full"
+              color="secondary"
+              [routerLink]="['/products/viewproduct']"
+              [queryParams]="{ id: product.uid, type: product.type }">
+              Desactivar
+            </ion-button>
+            <ion-button expand="full" color="danger">
+              Eliminar
+            </ion-button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ion-content>
