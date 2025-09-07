@@ -44,51 +44,44 @@
   </div>
 
   <div class="container-products">
-    <ion-card *ngFor="let product of products" class="product-card">
-      <!-- Imagen (acepta base64 o URL). Fallback si viene vacío -->
-      <img
-        [src]="product.product_image || 'assets/placeholder-product.png'"
-        alt="Product Image"
-        class="product-image" />
-
-      <ion-card-header>
-        <ion-card-title class="ion-text-capitalize">
-          {{ product.product_name }}
-        </ion-card-title>
-
-        <!-- Muestra categoría/subcategoría solo si es HardwareProduct -->
-        <ion-card-subtitle *ngIf="isHardware(product)">
-          {{ product.category || '—' }}
-          <ng-container *ngIf="product.subcategory">
-            - {{ product.subcategory }}
-          </ng-container>
-        </ion-card-subtitle>
-
-        <!-- Badge con el tipo -->
-        <ion-badge *ngIf="product.type" color="medium">{{ product.type | titlecase }}</ion-badge>
-      </ion-card-header>
-
-      <ion-card-content>
-        <p *ngIf="product.description">{{ product.description }}</p>
-        <p *ngIf="product.price !== undefined">Precio: {{ product.price | currency }}</p>
-      </ion-card-content>
-
-      <!-- Edit manda id + type para que el form sepa qué renderizar -->
-      <ion-button expand="full" color="primary" (click)="editProduct(product)">
-        Edit
-      </ion-button>
-
-      <ion-button
-        expand="full"
-        color="secondary"
-        [routerLink]="['/products/viewproduct']"
-        [queryParams]="{ id: product.uid, type: product.type }">
-        Desactivar
-      </ion-button>
-
-      <ion-button expand="full" color="danger">
-        Eliminar
-      </ion-button>
-    </ion-card>
+    <table class="table table-striped table-container" *ngIf="products.length > 0">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Imagen</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Precio</th>
+        <th scope="col">Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td>
+            <img
+              [src]="product.product_image || 'assets/placeholder-product.png'"
+              alt="Product Image"
+              class="product-image" />
+          </td>
+          <td>{{ product.product_name }}</td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.price | currency }}</td>
+          <td>
+            <ion-button expand="full" color="primary" (click)="editProduct(product)">
+              Edit
+            </ion-button>
+            <ion-button
+              expand="full"
+              color="secondary"
+              [routerLink]="['/products/viewproduct']"
+              [queryParams]="{ id: product.uid, type: product.type }">
+              Desactivar
+            </ion-button>
+            <ion-button expand="full" color="danger">
+              Eliminar
+            </ion-button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </ion-content>

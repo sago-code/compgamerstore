@@ -33,3 +33,13 @@
 .search-active ion-button {
     display: none !important;
 }
+
+.table-container {
+    --bs-table-bg-type: striped;
+    --bs-table-striped-bg: var(--ion-color-octonary, var(--ion-color-septonary));
+    --bs-table-striped-color: var(--ion-color-primary);
+}
+
+.table>:not(caption)>*>* {
+    background-color: var(--ion-color-quaternary, var(--ion-color-septonary)) !important;
+}
