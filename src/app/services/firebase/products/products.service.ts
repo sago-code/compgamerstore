@@ -7,8 +7,10 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  query,
   serverTimestamp,
-  setDoc
+  setDoc,
+  where
 } from 'firebase/firestore';
 import { Product, DesktopProduct, LaptopProduct } from 'src/app/models/product.model';
 import { environment } from 'src/environments/environment';
@@ -101,5 +103,12 @@ export class ProductsService {
     const ref = doc(this.db, 'products', uid);
     const snapshot = await getDoc(ref);
     return snapshot.exists() ? (snapshot.data() as Product) : null;
+  }
+
+  async getProductByName(name: string): Promise<Product | null> {
+    const productsRef = collection(this.db, 'products');
+    const q = query(productsRef, where('product_name', '==', name));
+    const snapshot = await getDocs(q);
+    return snapshot.empty ? null : (snapshot.docs[0].data() as Product);
   }
 }
