@@ -173,6 +173,7 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     const chitonary = getComputedStyle(root).getPropertyValue('--ion-color-chitonary').trim();
     const denary = getComputedStyle(root).getPropertyValue('--ion-color-denary').trim();
     const undenary = getComputedStyle(root).getPropertyValue('--ion-color-undenary').trim();
+    const quardenary = getComputedStyle(root).getPropertyValue('--ion-color-quardenary').trim();
 
     //colores oscuros
     const tertiary = getComputedStyle(root).getPropertyValue('--ion-color-tertiary').trim();
@@ -180,6 +181,7 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     const sextonary = getComputedStyle(root).getPropertyValue('--ion-color-sextonary').trim();
     const novenary = getComputedStyle(root).getPropertyValue('--ion-color-novenary').trim();
     const duodenary = getComputedStyle(root).getPropertyValue('--ion-color-duodenary').trim();
+    const tridenary = getComputedStyle(root).getPropertyValue('--ion-color-tridenary').trim();
 
     //de claro a oscuro
     root.style.setProperty('--ion-color-primary', quaternary);
@@ -187,6 +189,7 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     root.style.setProperty('--ion-color-chitonary', sextonary);
     root.style.setProperty('--ion-color-denary', novenary);
     root.style.setProperty('--ion-color-undenary', duodenary);
+    root.style.setProperty('--ion-color-quardenary', tridenary);
 
     //de oscuro a claro
     root.style.setProperty('--ion-color-quaternary', primary);
@@ -194,6 +197,7 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     root.style.setProperty('--ion-color-sextonary', chitonary);
     root.style.setProperty('--ion-color-novenary', denary);
     root.style.setProperty('--ion-color-duodenary', undenary);
+    root.style.setProperty('--ion-color-tridenary', quardenary);
 
     //Extras
     root.style.setProperty('--ion-color-septonary', sextonary);
@@ -204,14 +208,12 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
       if (logo) {
       // Cambia la ruta de la imagen según el modo
       const currentSrc = logo.getAttribute('src') || '';
-      console.log(currentSrc);
       if (currentSrc.includes('logo_dark')) {
         logo.setAttribute('src', currentSrc.replace('logo_dark', 'logo_light'));
       } else {
         logo.setAttribute('src', currentSrc.replace('logo_light', 'logo_dark'));
       }
       const currentSrsc = logo.getAttribute('src') || '';
-      console.log(currentSrsc);
     }
     });
   }

@@ -36,8 +36,8 @@ body {
 }
 
 .nameHeader h2 {
-  width: 18px;
-  height: 25px;
+  width: 25px;
+  height: 35px;
   color: var(--ion-color-novenary);
   font-family: "Poppins", sans-serif;
   overflow: hidden;
@@ -259,7 +259,7 @@ body {
     transition: 300ms;
     transition-delay: 2ms;
     interpolate-size: allow-keywords;
-    transform: translate(-96px, 0px);
+    transform: translate(0px, 0px);
     opacity: 1;
   }
 

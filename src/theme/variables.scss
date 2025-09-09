@@ -16,6 +16,8 @@
   --ion-color-denary: #a8a8a8;
   --ion-color-undenary: #26acc4;
   --ion-color-duodenary: #0a4b85;
+  --ion-color-tridenary: #042746;
+  --ion-color-quardenary: #2aaec5;
   // Add more colors as needed
 }
 
@@ -25,5 +27,3 @@ html, body, ion-app, ion-content, ion-toolbar, ion-header, :host, .container{
   --background: var(--ion-color-septonary) !important;
   --color: var(--ion-color-sextonary) !important;
 }
-
-
