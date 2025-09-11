@@ -15,8 +15,8 @@ export interface Product {
 
 export interface DesktopProduct extends Product {
   type: "desktop";
-  type_processor: string; // Identificador del tipo
-  processor: string;
+  brand_processor: string;
+  reference_processor: string;
   ram: string;
   storage: string;
   graphics: string;
@@ -27,8 +27,8 @@ export interface DesktopProduct extends Product {
 
 export interface LaptopProduct extends Product {
   type: "laptop"; // Identificador del tipo
-  processor: string;
-  type_processor: string;
+  brand_processor: string;
+  reference_processor: string;
   ram: string;
   storage: string;
   graphics: string;

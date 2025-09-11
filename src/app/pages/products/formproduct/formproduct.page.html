@@ -6,15 +6,16 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <ion-back-button defaultHref="/products" text="Volver" class="btn-back button-back"></ion-back-button>
   <form (ngSubmit)="saveProduct()">
 
     <!-- Imagen -->
-    <div class="register-avatar">
+    <div class="register-image">
       <ion-label>Imagen de producto</ion-label>
-      <label class="avatar" for="photoInput">
-        <img *ngIf="product?.product_image; else avatarPlaceholder" [src]="product.product_image" alt="Foto de producto" />
+      <label class="avatar product_image" for="photoInput">
+        <img class="image_product" *ngIf="product?.product_image; else avatarPlaceholder" [src]="product.product_image" alt="Foto de producto" />
         <ng-template #avatarPlaceholder>
-          <ion-icon name="person-circle-outline"></ion-icon>
+          <ion-icon class="image" name="image-outline"></ion-icon>
         </ng-template>
         <input id="photoInput" type="file" accept="image/*" (change)="onPhotoSelected($event)" hidden />
       </label>
@@ -47,8 +48,21 @@
     <!-- Campos Desktop -->
     <ng-container *ngIf="isDesktop(product)">
       <ion-item>
-        <ion-label position="floating">Procesador</ion-label>
-        <ion-input [(ngModel)]="product.processor" name="desktop_processor" type="text"></ion-input>
+        <ion-select
+          label="Marca del procesador"
+          interface="popover"
+          placeholder="Seleccione..."
+          justify="start"
+          [(ngModel)]="product.brand_processor"
+          name="brand_processor"
+          [disabled]="mode === 'edit' && isDesktop(product)">
+          <ion-select-option value="AMD">AMD</ion-select-option>
+          <ion-select-option value="Intel">Intel</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Referencia procesador</ion-label>
+          <ion-input [(ngModel)]="product.reference_processor" name="desktop_reference_processor" type="text" [disabled]="mode === 'edit' && isLaptop(product)"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">RAM</ion-label>
@@ -79,8 +93,21 @@
     <!-- Campos Laptop -->
     <ng-container *ngIf="isLaptop(product)">
       <ion-item>
-        <ion-label position="floating">Procesador</ion-label>
-        <ion-input [(ngModel)]="product.processor" name="laptop_processor" type="text"></ion-input>
+        <ion-select
+          label="Marca del procesador"
+          interface="popover"
+          placeholder="Seleccione..."
+          justify="start"
+          [(ngModel)]="product.brand_processor"
+          name="brand_processor"
+          [disabled]="mode === 'edit' && isLaptop(product)">
+          <ion-select-option value="AMD">AMD</ion-select-option>
+          <ion-select-option value="Intel">Intel</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Referencia procesador</ion-label>
+          <ion-input [(ngModel)]="product.reference_processor" name="reference_processor" type="text" [disabled]="mode === 'edit' && isLaptop(product)"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="floating">RAM</ion-label>
@@ -133,7 +160,6 @@
     </ng-container>
 
     <!-- Botón -->
-    <ion-button expand="full" type="submit">Guardar</ion-button>
+    <ion-button class="btn-guardar" expand="full" type="submit">Guardar</ion-button>
   </form>
 </ion-content>
-
