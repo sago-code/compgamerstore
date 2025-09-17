@@ -8,27 +8,27 @@
 <div class="navigation">
   <!-- Estado 1: Sin sesión -->
   <ul *ngIf="!isAuth">
-    <li class="list active">
+    <li class="list active homeNav">
       <a [routerLink]="['/home']" data-route>
         <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
       </a>
     </li>
-    <li class="list">
+    <li class="list ofertasNav">
       <a href="#">
         <span class="icon"><ion-icon name="pricetags"></ion-icon></span>
       </a>
     </li>
-    <li class="onSoping list">
+    <li class="onSoping list tiendaNav">
       <a href="javascript:void(0)" role="button" tabindex="0" (click)="onSoping(true)">
         <span class="icon"><ion-icon name="basket"></ion-icon></span>
       </a>
     </li>
-    <li class="list">
+    <li class="list carritoNav">
       <a href="#">
         <span class="icon"><ion-icon name="cart"></ion-icon></span>
       </a>
     </li>
-    <li class="list">
+    <li class="list loginNav">
       <a [routerLink]="['/login']" data-route>
         <span class="icon"><ion-icon name="log-in-outline"></ion-icon></span>
       </a>
@@ -38,26 +38,26 @@
 
   <!-- Estado 2: Sesión activa - Cliente cliente -->
   <ul *ngIf="isAuth && role === 'cliente'">
-    <li class="list active">
+    <li class="list active homeNav">
       <a [routerLink]="['/home']" data-route>
         <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
       </a>
     </li>
-    <li class="onSoping list">
+    <li class="onSoping list tiendaNav">
       <a href="javascript:void(0)" role="button" tabindex="0" (click)="onSoping(true)">
         <span class="icon"><ion-icon name="basket"></ion-icon></span>
       </a>
     </li>
-    <li class="list">
+    <li class="list carritoNav">
       <a href="#">
         <span class="icon"><ion-icon name="cart"></ion-icon></span>
       </a>
-    <li class="list">
+    <li class="list perfilNav">
       <a href="#">
         <span class="icon"><ion-icon name="person"></ion-icon></span>
       </a>
     </li>
-    <li class="list">
+    <li class="list logoutNav">
       <a href="javascript:void(0)" role="button" tabindex="0" (click)="logout()">
         <span class="icon"><ion-icon name="power"></ion-icon></span>
       </a>
@@ -67,27 +67,27 @@
 
   <!-- Estado 3: Sesión activa - Admin admin -->
   <ul *ngIf="isAuth && role === 'admin'">
-    <li class="onSoping list">
+    <li class="onSoping list productsNav">
       <a href="javascript:void(0)" role="button" tabindex="0" (click)="onSoping(true)">
         <span class="icon"><ion-icon name="cube"></ion-icon></span>
       </a>
     </li>
-    <li class="list">
+    <li class="list homeNav">
       <a href="/home">
         <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
       </a>
     </li>
-    <li class="list">
+    <li class="list ofertasNav">
       <a href="#">
         <span class="icon"><ion-icon name="people"></ion-icon></span>
       </a>
     </li>
-    <li class="list">
+    <li class="list perfilNav">
       <a href="#">
         <span class="icon"><ion-icon name="person"></ion-icon></span>
       </a>
     </li>
-    <li class="logout list">
+    <li class="logout list logoutNav">
       <a href="javascript:void(0)" role="button" tabindex="0" (click)="logout()">
         <span class="icon"><ion-icon name="power"></ion-icon></span>
       </a>
@@ -117,7 +117,7 @@
 </div>
 
 <!-- Navegación sólo para admin -->
-<div *ngIf="isAuth && role === 'admin'" class="onSoping1 navSopingActive1 navSoping">
+<div *ngIf="isAuth && role === 'admin'" class="onSoping1 navSoping">
   <ul>
     <li class="list">
       <a [routerLink]="['/products']" [queryParams]="{ type: 'laptop' }" data-route>

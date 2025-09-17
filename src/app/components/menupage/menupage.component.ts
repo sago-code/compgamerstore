@@ -40,12 +40,22 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     // Siempre recargar sesión ACTUAL tras cualquier navegación
     this.navSub = this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe(() => this.updateSession());
+      .subscribe(() => {
+      this.updateSession();
+
+      setTimeout(() => {
+        this.navNow();
+      }, 100);
+    });
+
+    // Ejecutar navNow también al cargar la página (por recarga o redirección)
+    this.navNow();
 
     this.loadingService.loading$.subscribe(active => {
       this.loadingActive = active;
       this.toggleLoading(active);
     });
+
   }
 
   async updateSession() {
@@ -225,6 +235,44 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
       ul?.classList.add('active-loading');
     } else {
       ul?.classList.remove('active-loading');
+    }
+  }
+
+  navNow() {
+    this.onSoping(false);
+    const host = this.el.nativeElement as HTMLElement;
+    const ul = host.querySelector('ul:not([hidden])');
+    if (!ul) return;
+    const items = ul.querySelectorAll('.list') as NodeListOf<HTMLElement>;
+    items.forEach(item => item.classList.remove('active'));
+
+    // Obtiene la ruta actual y la corta antes de un caracter específico (por ejemplo, '/')
+    let rutaActual = this.router.url.replace('/', '');
+    const index = rutaActual.indexOf('?');
+    if (index !== -1) {
+      rutaActual = rutaActual.substring(0, index);
+    }
+    const itemNow = ul.querySelector('.' + rutaActual + 'Nav') as HTMLElement | null;
+    if (itemNow) {
+      itemNow.classList.add('active');
+    }
+
+    const handler = () => {
+      const navSoping = host.querySelector('.navSoping');
+      const onSoping1 = host.querySelector('.onSoping1');
+      const navSoping2 = host.querySelector('.onSoping2');
+      console.log(onSoping1);
+      if (navSoping2) {
+        navSoping2.classList.toggle('navSopingActive2');
+      }else if (onSoping1) {
+        onSoping1.classList.toggle('navSopingActive1');
+      }else if (navSoping) {
+        navSoping.classList.toggle('navSopingActive');
+      }
+    };
+
+    if (rutaActual == 'products') {
+      handler();
     }
   }
 }

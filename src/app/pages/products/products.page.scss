@@ -78,12 +78,6 @@
   --transition: all 0.2s ease-in-out;
 }
 
-.btn-edit,
-.btn-desactivate,
-.btn-delete svg {
-  color: var(--ion-color-sextonary);
-}
-
 .btn-edit:hover {
   --background: var(--ion-color-tridenary) !important;
   box-shadow: 0 0px 12px 4px var(--ion-color-secondary) !important;
