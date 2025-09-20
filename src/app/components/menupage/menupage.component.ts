@@ -180,7 +180,8 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     //colores claros
     const primary = getComputedStyle(root).getPropertyValue('--ion-color-primary').trim();
     const secondary = getComputedStyle(root).getPropertyValue('--ion-color-secondary').trim();
-    const chitonary = getComputedStyle(root).getPropertyValue('--ion-color-chitonary').trim();
+    const sextonary = getComputedStyle(root).getPropertyValue('--ion-color-sextonary').trim();
+    const sextonaryV2 = getComputedStyle(root).getPropertyValue('--ion-color-chitonary-v2').trim();
     const denary = getComputedStyle(root).getPropertyValue('--ion-color-denary').trim();
     const undenary = getComputedStyle(root).getPropertyValue('--ion-color-undenary').trim();
     const quardenary = getComputedStyle(root).getPropertyValue('--ion-color-quardenary').trim();
@@ -188,7 +189,8 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     //colores oscuros
     const tertiary = getComputedStyle(root).getPropertyValue('--ion-color-tertiary').trim();
     const quaternary = getComputedStyle(root).getPropertyValue('--ion-color-quaternary').trim();
-    const sextonary = getComputedStyle(root).getPropertyValue('--ion-color-sextonary').trim();
+    const chitonary = getComputedStyle(root).getPropertyValue('--ion-color-chitonary').trim();
+    const chitonaryV2 = getComputedStyle(root).getPropertyValue('--ion-color-chitonary-v2').trim();
     const novenary = getComputedStyle(root).getPropertyValue('--ion-color-novenary').trim();
     const duodenary = getComputedStyle(root).getPropertyValue('--ion-color-duodenary').trim();
     const tridenary = getComputedStyle(root).getPropertyValue('--ion-color-tridenary').trim();
@@ -197,6 +199,7 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     root.style.setProperty('--ion-color-primary', quaternary);
     root.style.setProperty('--ion-color-secondary', tertiary);
     root.style.setProperty('--ion-color-chitonary', sextonary);
+    root.style.setProperty('--ion-color-chitonary-v2', sextonaryV2);
     root.style.setProperty('--ion-color-denary', novenary);
     root.style.setProperty('--ion-color-undenary', duodenary);
     root.style.setProperty('--ion-color-quardenary', tridenary);
@@ -205,6 +208,7 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     root.style.setProperty('--ion-color-quaternary', primary);
     root.style.setProperty('--ion-color-tertiary', secondary);
     root.style.setProperty('--ion-color-sextonary', chitonary);
+    root.style.setProperty('--ion-color-sextonary-v2', chitonaryV2);
     root.style.setProperty('--ion-color-novenary', denary);
     root.style.setProperty('--ion-color-duodenary', undenary);
     root.style.setProperty('--ion-color-tridenary', quardenary);
