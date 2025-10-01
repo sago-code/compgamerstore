@@ -18,7 +18,11 @@ const routes: Routes = [
   {
     path: 'products',
     loadChildren: () => import('./pages/products/products.module').then( m => m.ProductsPageModule)
+  },  {
+    path: 'admin-users',
+    loadChildren: () => import('./pages/admin-users/admin-users.module').then( m => m.AdminUsersPageModule)
   },
+
 ];
 
 @NgModule({

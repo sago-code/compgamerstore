@@ -303,7 +303,7 @@ export class LoginPage implements OnInit {
         await this.session.setSession(sessionPayload);
         alert('Inicio de sesión con Google exitoso');
         if(userProfile.role == "admin") {
-          this.router.navigateByUrl('/products', { replaceUrl: true });
+          this.router.navigateByUrl('/home', { replaceUrl: true });
         } else {
           this.router.navigateByUrl('/home', { replaceUrl: true });
         }

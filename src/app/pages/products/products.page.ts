@@ -1,8 +1,9 @@
 import { Component, ElementRef, OnDestroy, Renderer2, ViewChild, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonInput } from '@ionic/angular';
+import { IonInput, AlertController  } from '@ionic/angular';
 import { ProductsService } from '../../services/firebase/products/products.service';
 import { HardwareProduct, Product } from 'src/app/models/product.model';
+import { LoadingService } from 'src/app/loading-service';
 
 @Component({
   selector: 'app-products',
@@ -26,7 +27,9 @@ export class ProductsPage implements OnInit, OnDestroy {
     private renderer: Renderer2,
     private route: ActivatedRoute,
     private router: Router,
-    private productsService: ProductsService
+    private productsService: ProductsService,
+    private loadingService: LoadingService,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -43,6 +46,12 @@ export class ProductsPage implements OnInit, OnDestroy {
   async loadProducts() {
     try {
       this.allProducts = await this.productsService.getProducts();
+      // Ordenar por fecha de creación (más reciente primero)
+      this.allProducts.sort((a, b) => {
+        const dateA = a.created_at ? (a.created_at as any).toDate?.() || new Date(0) : new Date(0);
+        const dateB = b.created_at ? (b.created_at as any).toDate?.() || new Date(0) : new Date(0);
+        return dateB.getTime() - dateA.getTime();
+      });
       this.applyFilter(); // aplico filtro apenas termine la carga
     } catch (error) {
       console.error('Error cargando productos:', error);
@@ -118,6 +127,78 @@ export class ProductsPage implements OnInit, OnDestroy {
         queryParams: { mode: 'edit', uid: product.uid, type: product.type }
       });
     });
+  }
+
+  async softDeleteProduct(product: Product) {
+    const alert = await this.alertController.create({
+      header: 'Confirmar',
+      message: `¿Deseas desactivar el producto "${product.product_name}"?, esta accion se puede revertir`,
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Desactivar',
+          handler: () => {
+            this.productsService.softDeleteProduct(product.uid).then(() => {
+              this.loadProducts();
+              this.loadingService.show();
+              setTimeout(() => {
+                this.loadingService.hide();
+              }, 500);
+            });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async restoreProduct(product: Product) {
+    const alert = await this.alertController.create({
+      header: 'Confirmar',
+      message: `¿Restaurar el producto "${product.product_name}"?`,
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Restaurar',
+          handler: () => {
+            this.productsService.restoreProduct(product.uid).then(() => {
+              this.loadProducts();
+              this.loadingService.show();
+              setTimeout(() => {
+                this.loadingService.hide();
+              }, 500);
+            });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async hardDeleteProduct(product: Product) {
+    const alert = await this.alertController.create({
+      header: 'Confirmar',
+      message: `¿Eliminar permanentemente el producto "${product.product_name}"? Esta acción no se puede revertir.`,
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Eliminar',
+          handler: () => {
+            this.productsService.hardDeleteProduct(product.uid).then(() => {
+              this.loadProducts();
+              this.loadingService.show();
+              setTimeout(() => {
+                this.loadingService.hide();
+              }, 500);
+            });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   isHardware(p: Product): p is HardwareProduct {

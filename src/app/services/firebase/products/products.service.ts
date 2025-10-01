@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { FirebaseApp, getApp, getApps, initializeApp } from 'firebase/app';
 import {
   collection,
+  deleteDoc,
   doc,
   Firestore,
   getDoc,
   getDocs,
   getFirestore,
+  query,
   serverTimestamp,
-  setDoc
+  setDoc,
+  where
 } from 'firebase/firestore';
 import { Product, DesktopProduct, LaptopProduct } from 'src/app/models/product.model';
 import { environment } from 'src/environments/environment';
@@ -44,7 +47,7 @@ export class ProductsService {
     // 🔹 Validación específica para Desktop
     if (product.type === 'desktop') {
       const desktopFields: (keyof DesktopProduct)[] = [
-        'processor', 'ram', 'storage', 'graphics', 'motherboard', 'power_supply', 'case'
+        'brand_processor', 'reference_processor', 'ram', 'storage', 'graphics', 'motherboard', 'power_supply', 'case'
       ];
       for (const field of desktopFields) {
         if (!(product as any)[field]) {
@@ -56,7 +59,7 @@ export class ProductsService {
     // 🔹 Validación específica para Laptop
     if (product.type === 'laptop') {
       const laptopFields: (keyof LaptopProduct)[] = [
-        'processor', 'ram', 'storage', 'graphics', 'battery', 'weight'
+        'brand_processor', 'reference_processor', 'ram', 'storage', 'graphics', 'battery', 'weight'
       ];
       for (const field of laptopFields) {
         if (!(product as any)[field]) {
@@ -101,5 +104,25 @@ export class ProductsService {
     const ref = doc(this.db, 'products', uid);
     const snapshot = await getDoc(ref);
     return snapshot.exists() ? (snapshot.data() as Product) : null;
+  }
+
+  async getProductByName(name: string): Promise<Product | null> {
+    const productsRef = collection(this.db, 'products');
+    const q = query(productsRef, where('product_name', '==', name));
+    const snapshot = await getDocs(q);
+    return snapshot.empty ? null : (snapshot.docs[0].data() as Product);
+  }
+
+  async softDeleteProduct(uid: string): Promise<void> {
+    const now = serverTimestamp();
+    await this.updateProduct(uid, { deleted_at: now });
+  }
+
+  async restoreProduct(uid: string): Promise<void> {
+    await this.updateProduct(uid, { deleted_at: null });
+  }
+
+  async hardDeleteProduct(uid: string): Promise<void> {
+    await deleteDoc(doc(this.db, 'products', uid));
   }
 }

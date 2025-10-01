@@ -41,6 +41,14 @@ export class FormproductPage implements OnInit {
           if (product) {
             this.product = product;
             this.photoPreview = product.product_image || null;
+            if (this.isDesktop(product) || this.isLaptop(product)) {
+              if ('brand_processor' in product) {
+                (this.product as DesktopProduct | LaptopProduct).brand_processor = product.brand_processor || '';
+              }
+              if ('reference_processor' in product) {
+                (this.product as DesktopProduct | LaptopProduct).reference_processor = product.reference_processor || '';
+              }
+            }
           }
         } catch (err) {
           console.error('Error cargando producto:', err);
@@ -123,13 +131,15 @@ export class FormproductPage implements OnInit {
     try {
       if (this.mode === 'edit' && this.originalUid) {
         await this.productsService.updateProduct(this.originalUid, this.product);
-        await this.showAlert('¡Éxito!', 'Producto actualizado correctamente.');
+        await alert('Producto actualizado correctamente.');
       } else {
         await this.productsService.createProduct(this.product);
-        await this.showAlert('¡Éxito!', 'Producto guardado correctamente.');
+        await alert('Producto guardado correctamente.');
       }
 
-      this.router.navigate(['/products'], { queryParams: { type: this.product.type } });
+      this.router.navigate(['/products'], { queryParams: { type: this.product.type } }).then(() => {
+        window.location.reload();
+      });
     } catch (error: any) {
       await this.showAlert('Error', error.message || 'Ocurrió un error al guardar el producto.');
     }

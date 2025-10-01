@@ -9,21 +9,26 @@
   --ion-color-tertiary: #501b73;
   --ion-color-quaternary: #064277;
   --ion-color-chitonary: #0d151b;
+  --ion-color-chitonary-v2: #0d151bb9;
   --ion-color-sextonary: #ececec;
+  --ion-color-sextonary-v2: #fafafada;
   --ion-color-septonary: var(--ion-background-color);
   --ion-color-octonary: var(--ion-toolbar-background);
   --ion-color-novenary: #1a1a1a;
   --ion-color-denary: #a8a8a8;
   --ion-color-undenary: #26acc4;
   --ion-color-duodenary: #0a4b85;
+  --ion-color-tridenary: #042746;
+  --ion-color-quardenary: #2aaec5;
   // Add more colors as needed
 }
 
-html, body, ion-app, ion-content, ion-toolbar, ion-header, :host, .container{
+html, body, ion-app, ion-content, ion-toolbar, ion-header, ion-item, ion-back-button,
+:host, .container, .sc-ion-select-popover-md-h ion-list.sc-ion-select-popover-md,
+ion-item.sc-ion-select-popover-md
+{
   background-color: var(--ion-color-septonary) !important;
   color: var(--ion-color-sextonary) !important;
   --background: var(--ion-color-septonary) !important;
   --color: var(--ion-color-sextonary) !important;
 }
-
-
