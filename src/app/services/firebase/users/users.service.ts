@@ -28,6 +28,9 @@ import { SocialLogin } from '@capgo/capacitor-social-login';
 
 @Injectable({ providedIn: 'root' })
 export class UserFirebaseService {
+  createUser(value: Partial<{ phone: string; email: string; password: string; confirm_password: string; age: string; document_type: string; document_number: string; first_name: string; last_name: string; departament: string; municipality: string; address: string; role: string; photo: any; }>) {
+    throw new Error('Method not implemented.');
+  }
   private app: FirebaseApp;
   private auth: Auth;
   private db: Firestore;
@@ -134,5 +137,11 @@ export class UserFirebaseService {
     if (userDoc.exists()) return userDoc.data() as User;
     return null;
   }
-}
 
+  async getAdminUsers(): Promise<User[]> {
+    const usersRef = collection(this.db, 'users');
+    const q = query(usersRef, where('role', '==', 'admin'));
+    const querySnap = await getDocs(q);
+    return querySnap.docs.map(doc => doc.data() as User);
+  } 
+}

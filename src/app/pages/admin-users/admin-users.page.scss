@@ -24,4 +24,131 @@
     --border-style: solid;
     --border-width: 1px;
     transition: 200ms;
-  }
+}
+
+.search-active {
+    width: 100%;
+}
+
+.search-active ion-button {
+    display: none !important;
+}
+
+.table-container {
+    --bs-table-bg-type: striped;
+    --bs-table-striped-bg: var(--ion-color-octonary, var(--ion-color-septonary));
+    --bs-table-striped-color: var(--ion-color-sextonary);
+    vertical-align: middle;
+    transition: 400ms;
+}
+
+.table-container img {
+    width: 16em;
+    min-width: 250px;
+    object-fit: contain;
+    border-radius: 20px;
+}
+
+.table>:not(caption)>*>* {
+    background-color: var(--ion-color-tridenary, var(--ion-color-septonary)) !important;
+    color: var(--bs-table-color-state, var(--bs-table-color-type, var(--ion-color-sextonary))) !important;
+    /*   background-color: var(--ion-color-denary, var(--ion-color-septonary)) !important;
+    color: var(--bs-table-color-state, var(--bs-table-color-type,  var(--ion-color-octonary))) !important; */
+    --bs-table-striped-color: var(--ion-color-sextonary);
+    transition: 400ms;
+}
+
+.btn-edit,
+.btn-desactivate,
+.btn-delete {
+    --background: var(--ion-color-quaternary);
+    --color: var(--ion-color-sextonary);
+
+    --border-radius: 0px;
+    --border-color: transparent;
+    --border-style: solid;
+    --border-width: 0px;
+    border-radius: 10px !important;
+
+
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    border-radius: 6px !important;
+    overflow: hidden;
+    --transition: all 0.2s ease-in-out;
+}
+
+.btn-edit:hover {
+    --background: var(--ion-color-tridenary) !important;
+    box-shadow: 0 0px 12px 4px var(--ion-color-secondary) !important;
+}
+
+.btn-desactivate {
+    --background: var(--ion-color-secondary);
+}
+
+.btn-desactivate:hover {
+    --background: var(--ion-color-tertiary) !important;
+    box-shadow: 0 0px 12px 4px var(--ion-color-primary) !important;
+}
+
+.btn-delete {
+    --background: var(--ion-color-denary);
+    --color: var(--ion-color-novenary);
+}
+
+.btn-delete:hover {
+    --background: var(--ion-color-novenary) !important;
+    box-shadow: 0 0px 12px 4px var(--ion-color-secondary) !important;
+    --color: var(--ion-color-sextonary);
+}
+
+.btn-restore {
+    --background: #4fc3f7 !important; // azul claro
+    --color: #fff !important;
+}
+
+.btn-restore:hover {
+    --background: #0288d1 !important; // azul más intenso al pasar el mouse
+    box-shadow: 0 0px 12px 4px #4fc3f7 !important;
+    --color: #fff !important;
+}
+
+.mobileView {
+    display: none;
+    width: 100%;
+}
+
+.pcView {
+    display: table-cell;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+
+.table-container tr:hover {
+    --bs-table-striped-bg: var(--ion-color-tertiary, var(--ion-color-septonary));
+    transition: 300ms;
+}
+
+table>:not(caption) tr:not(:has(th)):hover>* {
+    background-color: var(--ion-color-tertiary, var(--ion-color-septonary)) !important;
+    transition: 300ms;
+}
+
+@media (max-width: 768px) {
+    .pcView {
+        display: none;
+    }
+
+    .mobileView {
+        display: block;
+    }
+
+    .table-container td {
+        text-align: center;
+    }
+}

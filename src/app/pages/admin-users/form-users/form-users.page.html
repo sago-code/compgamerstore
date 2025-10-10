@@ -1,0 +1,61 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{ pageTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-back-button defaultHref="/admin-users" text="Volver" class="btn-back button-back"></ion-back-button>
+  <form (ngSubmit)="saveUser()">
+
+    <!-- Foto de perfil -->
+    <div class="register-image">
+      <ion-label>Foto de perfil</ion-label>
+      <label class="avatar" for="photoInput">
+        <img *ngIf="photoPreview; else avatarPlaceholder" [src]="photoPreview" alt="Foto de usuario" />
+        <ng-template #avatarPlaceholder>
+          <ion-icon name="person-circle-outline"></ion-icon>
+        </ng-template>
+        <input id="photoInput" type="file" accept="image/*" (change)="onPhotoSelected($event)" hidden />
+      </label>
+    </div>
+
+    <!-- informacion basica -->
+    <div>
+      <ion-item>
+        <ion-label position="floating">Nombres</ion-label>
+        <ion-input [(ngModel)]="user.first_name" name="first_name" type="text" required></ion-input>
+      </ion-item>
+    </div>
+    <div>
+      <ion-item>
+        <ion-label position="floating">Apellidos</ion-label>
+        <ion-input [(ngModel)]="user.last_name" name="last_name" type="text" required></ion-input>
+      </ion-item>
+    </div>
+    <div>
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input [(ngModel)]="user.email" name="email" type="email" required></ion-input>
+      </ion-item>
+    </div>
+
+    <div *ngIf="mode === 'create'">
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input [(ngModel)]="user.password" name="password" type="password" required></ion-input>
+      </ion-item>
+    </div>
+
+    <div>
+      <ion-item>
+        <ion-label position="floating">Teléfono</ion-label>
+        <ion-input [(ngModel)]="user.phone" name="phone" type="text"></ion-input>
+      </ion-item>
+    </div>
+
+    <ion-button expand="full" type="submit" shape="round" [disabled]="!user.first_name || !user.last_name || !user.email || (mode === 'create' && !user.password)" class="btn-login">
+      {{ mode === 'create' ? 'Crear usuario' : 'Guardar cambios' }}
+    </ion-button>
+  </form>
+</ion-content>

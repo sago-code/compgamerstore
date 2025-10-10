@@ -18,9 +18,61 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">admin_users</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="px-4 py-3">
+    <ion-button (click)="navigateToCreate()">
+      Añadir administrador
+    </ion-button>
+  </div>
+
+  <!-- Estado vacío -->
+  <div *ngIf="users.length === 0" class="ion-text-center ion-padding">
+    <ion-icon name="people-outline" style="font-size: 48px;"></ion-icon>
+    <p>No hay administradores para mostrar.</p>
+  </div>
+
+  <div class="container-products">
+    <table class="table table-striped table-container">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col" class="pcView">Imagen</th>
+          <th scope="col" class="pcView">Nombre</th>
+          <th scope="col" class="pcView">Email</th>
+          <th scope="col" class="pcView">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>
+            <ng-container *ngIf="user.photo; else noPhoto">
+              <img [src]="user.photo" alt="User Image" class="product-image" />
+            </ng-container>
+            <ng-template #noPhoto>
+              <ion-icon name="person-circle-outline" style="font-size: 48px; color: #888;"></ion-icon>
+            </ng-template>
+            <div class="mobileView">
+              <p>{{ user.first_name }} {{ user.last_name }}</p>
+              <p>{{ user.email }}</p>
+              <div class="action-buttons">
+                <ion-button expand="full" (click)="editUser(user)" class="btn-edit"
+                  style="max-width: max-content; margin:0px;">
+                  <ion-icon name="pencil-sharp"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </td>
+          <td class="pcView">{{ user.first_name }} {{ user.last_name }}</td>
+          <td class="pcView">{{ user.email }}</td>
+          <td class="pcView">
+            <div class="action-buttons">
+              <ion-button expand="full" (click)="editUser(user)" class="btn-edit"
+                style="max-width: max-content; margin:0px;">
+                <ion-icon name="pencil-sharp"></ion-icon>
+              </ion-button>
+
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </ion-content>

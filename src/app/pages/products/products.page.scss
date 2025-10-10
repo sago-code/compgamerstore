@@ -103,6 +103,17 @@
   --color: var(--ion-color-sextonary);
 }
 
+.btn-restore {
+  --background: #4fc3f7 !important; // azul claro
+  --color: #fff !important;
+}
+
+.btn-restore:hover {
+  --background: #0288d1 !important; // azul más intenso al pasar el mouse
+  box-shadow: 0 0px 12px 4px #4fc3f7 !important;
+  --color: #fff !important;
+}
+
 .mobileView {
   display: none;
   width: 100%;
@@ -113,6 +124,7 @@
   width: 100%;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;

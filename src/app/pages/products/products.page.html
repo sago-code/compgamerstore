@@ -59,11 +59,21 @@
                   style="max-width: max-content; margin:0px;">
                   <ion-icon name="pencil-sharp"></ion-icon>
                 </ion-button>
-                <ion-button expand="full" class="btn-desactivate" [routerLink]="['/products/viewproduct']"
-                  [queryParams]="{ id: product.uid, type: product.type }" style="max-width: max-content; margin:0px;">
+                <ion-button expand="full" class="btn-desactivate"
+                  *ngIf="!product.deleted_at"
+                  (click)="softDeleteProduct(product)"
+                  style="max-width: max-content; margin:0px;">
                   <ion-icon name="power"></ion-icon>
                 </ion-button>
-                <ion-button expand="full" class="btn-delete" style="max-width: max-content; margin:0px;">
+                <ion-button expand="full" class="btn-desactivate btn-restore"
+                  *ngIf="product.deleted_at"
+                  (click)="restoreProduct(product)"
+                  style="max-width: max-content; margin:0px;">
+                  <ion-icon name="refresh"></ion-icon>
+                </ion-button>
+                <ion-button expand="full" class="btn-delete"
+                  (click)="hardDeleteProduct(product)"
+                  style="max-width: max-content; margin:0px;">
                   <ion-icon name="trash-bin-sharp"></ion-icon>
                 </ion-button>
               </div>
@@ -80,11 +90,21 @@
                 style="max-width: max-content; margin:0px;">
                 <ion-icon name="pencil-sharp"></ion-icon>
               </ion-button>
-              <ion-button expand="full" class="btn-desactivate" [routerLink]="['/products/viewproduct']"
-                [queryParams]="{ id: product.uid, type: product.type }" style="max-width: max-content; margin:0px;">
+              <ion-button expand="full" class="btn-desactivate"
+                *ngIf="!product.deleted_at"
+                (click)="softDeleteProduct(product)"
+                style="max-width: max-content; margin:0px;">
                 <ion-icon name="power"></ion-icon>
               </ion-button>
-              <ion-button expand="full" class="btn-delete" style="max-width: max-content; margin:0px;">
+              <ion-button expand="full" class="btn-desactivate btn-restore"
+                *ngIf="product.deleted_at"
+                (click)="restoreProduct(product)"
+                style="max-width: max-content; margin:0px;">
+                <ion-icon name="refresh"></ion-icon>
+              </ion-button>
+              <ion-button expand="full" class="btn-delete"
+                (click)="hardDeleteProduct(product)"
+                style="max-width: max-content; margin:0px;">
                 <ion-icon name="trash-bin-sharp"></ion-icon>
               </ion-button>
             </div>
