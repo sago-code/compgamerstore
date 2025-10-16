@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { SessionService } from '../../../services/session.service';
+import { register } from 'swiper/element/bundle';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +8,7 @@ import { SessionService } from '../../../services/session.service';
   styleUrls: ['home.page.scss'],
   standalone: false,
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, AfterViewInit {
 
   loading = true;
   role: string | null = null;
@@ -21,6 +22,10 @@ export class HomePage implements OnInit {
     this.session = await this.sessionService.getSession();
     this.role = this.session?.role || null;
     this.loading = false;
+  }
+
+  ngAfterViewInit() {
+    register();
   }
 
 }

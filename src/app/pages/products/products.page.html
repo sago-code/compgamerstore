@@ -9,9 +9,18 @@
       <ion-icon name="search-outline"></ion-icon>
     </ion-button>
 
-    <ion-input #searchInput id="search-input" class="search-input" type="text" placeholder="Buscar producto"
-      [class.active]="searchActive" [style.width]="searchActive ? '100%' : '0'" [attr.tabindex]="searchActive ? 0 : -1"
-      [readonly]="!searchActive" [autofocus]="searchActive">
+    <ion-input
+      #searchInput
+      id="search-input"
+      class="search-input"
+      type="text"
+      placeholder="Buscar producto"
+      (ionInput)="onSearchInput($event)"
+      [class.active]="searchActive"
+      [style.width]="searchActive ? '100%' : '0'"
+      [attr.tabindex]="searchActive ? 0 : -1"
+      [readonly]="!searchActive"
+      [autofocus]="searchActive">
       <ion-icon name="search-outline" slot="start"></ion-icon>
     </ion-input>
   </div>

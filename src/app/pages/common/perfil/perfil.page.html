@@ -1,0 +1,172 @@
+<ion-header [translucent]="true">
+  <app-menupage></app-menupage>
+  <ion-toolbar>
+    <ion-title>perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Botón único de edición flotante (menú de acciones) -->
+  <ion-fab *ngIf="(user$ | async)" vertical="top" horizontal="end" slot="fixed" class="edit-fab">
+    <ion-fab-button size="small" color="primary" (click)="onEditFab()">
+      <ion-icon [name]="editing ? 'close-outline' : 'create-outline'"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Selector de imagen oculto para cambiar foto -->
+  <input #photoInput type="file" accept="image/*" hidden (change)="onPhotoSelected($event)" />
+
+  <!-- Vista para admin -->
+  <ng-container *ngIf="(role$ | async) === 'admin'; else clientView">
+    <ion-card class="profile-card" *ngIf="(user$ | async) as user">
+      <ion-item class="profile-item" lines="none">
+        <ion-avatar slot="start" class="avatar">
+          <img [src]="user?.photoURL || 'assets/images/default-avatar.png'">
+        </ion-avatar>
+        <div class="user-info">
+          <ion-label class="name">{{ user?.displayName || 'Usuario' }}</ion-label>
+          <div class="email-container">
+            <ion-label class="email">{{ user?.email || 'sin correo' }}</ion-label>
+          </div>
+        </div>
+      </ion-item>
+
+      <form [formGroup]="profileForm">
+        <ion-list class="details-list">
+          <ion-item>
+            <ion-label>Teléfono</ion-label>
+            <!-- leer desde el formulario -->
+            <ion-note slot="end" *ngIf="!editing">{{ profileForm.get('phone')?.value || '-' }}</ion-note>
+            <ion-input slot="end" *ngIf="editing" formControlName="phone" type="tel"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Dirección</ion-label>
+            <ion-note slot="end" *ngIf="!editing">{{ profileForm.get('direction')?.value || '-' }}</ion-note>
+            <ion-input slot="end" *ngIf="editing" formControlName="direction"></ion-input>
+          </ion-item>
+
+          <!-- Departamento -->
+          <ion-item>
+            <ion-label>Departamento</ion-label>
+            <ion-note slot="end" *ngIf="!editing">{{ profileForm.get('departament')?.value || '-' }}</ion-note>
+            <ion-select *ngIf="editing" [interfaceOptions]="customDepartamentActionSheetOptions"
+              interface="modal" placeholder="Seleccione..." (ionChange)="fruitSelectionChanged($event.detail.value)" formControlName="departament">
+              <ion-select-option *ngFor="let Departament of valueDepartament" [value]="Departament.text">
+                {{ Departament.text }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          
+          <!-- Ciudad / Municipio -->
+          <ion-item>
+            <ion-label>Ciudad</ion-label>
+            <ion-note slot="end" *ngIf="!editing">{{ profileForm.get('municipality')?.value || '-' }}</ion-note>
+            <ion-select *ngIf="editing" [interfaceOptions]="customMunicipalityActionSheetOptions"
+              interface="modal" placeholder="Seleccione..." formControlName="municipality">
+              <ion-select-option *ngFor="let Municipality of valueMunicipality" [value]="Municipality.text">
+                {{ Municipality.text }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <!-- Vista para admin -->
+          <ion-item>
+            <ion-label>Sincronizar cuenta</ion-label>
+            <ion-button color="primary" (click)="syncGoogleAccount()" [disabled]="hasGoogleProvider">
+              Google
+              <ion-icon *ngIf="hasGoogleProvider" name="checkmark-circle-outline" slot="end"></ion-icon>
+            </ion-button>
+            <ion-button color="primary" (click)="syncEmailAccount()" [disabled]="hasPasswordProvider">
+              Correo y clave
+              <ion-icon *ngIf="hasPasswordProvider" name="checkmark-circle-outline" slot="end"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+
+        <div class="actions" *ngIf="editing">
+          <ion-button color="primary" (click)="saveChanges()">Guardar</ion-button>
+          <ion-button fill="clear" color="medium" (click)="cancelEdit()">Cancelar</ion-button>
+        </div>
+
+        <ion-item>
+          <ion-button color="danger" (click)="confirmLogout()">Cerrar sesión</ion-button>
+        </ion-item>
+      </form>
+    </ion-card>
+  </ng-container>
+
+  <ng-template #clientView>
+    <ion-card class="profile-card" *ngIf="(user$ | async) as user">
+      <!-- Cabecera: avatar, nombre, email -->
+      <ion-item class="profile-item" lines="none">
+        <ion-avatar slot="start" class="avatar">
+          <img [src]="user?.photoURL || 'assets/images/default-avatar.png'">
+        </ion-avatar>
+        <div class="user-info">
+          <ion-label class="name">{{ user?.displayName || 'Usuario' }}</ion-label>
+          <ion-label class="email">{{ user?.email || 'sin correo' }}</ion-label>
+        </div>
+      </ion-item>
+
+      <form [formGroup]="profileForm">
+        <ion-list class="details-list">
+          <ion-item>
+            <ion-label>Teléfono</ion-label>
+            <ion-note slot="end" *ngIf="!editing">{{ profileForm.get('phone')?.value || '-' }}</ion-note>
+            <ion-input slot="end" *ngIf="editing" formControlName="phone" type="tel"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Dirección</ion-label>
+            <ion-note slot="end" *ngIf="!editing">{{ profileForm.get('direction')?.value || '-' }}</ion-note>
+            <ion-input slot="end" *ngIf="editing" formControlName="direction"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Departamento</ion-label>
+            <ion-note slot="end" *ngIf="!editing">{{ profileForm.get('departament')?.value || '-' }}</ion-note>
+            <ion-input slot="end" *ngIf="editing" formControlName="departament"></ion-input>
+            
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Ciudad</ion-label>
+            <ion-note slot="end" *ngIf="!editing">{{ profileForm.get('municipality')?.value || '-' }}</ion-note>
+            <ion-select *ngIf="editing" label="Ciudad de residencia" [interfaceOptions]="customMunicipalityActionSheetOptions"
+              interface="modal" placeholder="Seleccione..." formControlName="municipality">
+              <ion-select-option *ngFor="let Municipality of valueMunicipality" [value]="Municipality.value">
+                {{ Municipality.text }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+
+        <div class="actions" *ngIf="editing">
+          <ion-button color="primary" (click)="saveChanges()">Guardar</ion-button>
+          <ion-button fill="clear" color="medium" (click)="cancelEdit()">Cancelar</ion-button>
+        </div>
+        
+        <ion-item>
+          <ion-label>Sincronizar cuenta</ion-label>
+          <ion-button color="primary" (click)="syncGoogleAccount()" [disabled]="hasGoogleProvider">
+            Google
+            <ion-icon *ngIf="hasGoogleProvider" name="checkmark-circle-outline" slot="end"></ion-icon>
+          </ion-button>
+          <ion-button color="primary" (click)="syncEmailAccount()" [disabled]="hasPasswordProvider">
+            Correo y clave
+            <ion-icon *ngIf="hasPasswordProvider" name="checkmark-circle-outline" slot="end"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <div class="actions">
+          <ion-item>
+            <ion-button> <ion-icon name="cart-outline"></ion-icon>Mis pedidos</ion-button>
+          </ion-item>
+
+          <ion-item>
+            <ion-button color="danger" (click)="confirmLogout()">Cerrar sesión</ion-button>
+          </ion-item>
+        </div>
+      </form>
+    </ion-card>
+  </ng-template>
+</ion-content>

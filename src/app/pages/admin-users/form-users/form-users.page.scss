@@ -1,0 +1,26 @@
+.button-back {
+    width: 15%;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register-form > div:has(ion-item) {
+    width: 80%;
+}
+
+ion-icon, img {
+    height: 80px;
+    width: 80px;
+    border-radius: 50px;
+    object-fit: cover;
+}
+
+.register-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

@@ -6,7 +6,7 @@
 
 <ion-content [fullscreen]="true">
   <ion-back-button defaultHref="/admin-users" text="Volver" class="btn-back button-back"></ion-back-button>
-  <form (ngSubmit)="saveUser()">
+  <form class="register-form" [formGroup]="registerForm" (ngSubmit)="saveUser()">
 
     <!-- Foto de perfil -->
     <div class="register-image">
@@ -24,37 +24,100 @@
     <div>
       <ion-item>
         <ion-label position="floating">Nombres</ion-label>
-        <ion-input [(ngModel)]="user.first_name" name="first_name" type="text" required></ion-input>
+        <ion-input formControlName="first_name" type="text" required></ion-input>
       </ion-item>
     </div>
     <div>
       <ion-item>
         <ion-label position="floating">Apellidos</ion-label>
-        <ion-input [(ngModel)]="user.last_name" name="last_name" type="text" required></ion-input>
+        <ion-input formControlName="last_name" type="text" required></ion-input>
       </ion-item>
     </div>
     <div>
       <ion-item>
         <ion-label position="floating">Email</ion-label>
-        <ion-input [(ngModel)]="user.email" name="email" type="email" required></ion-input>
+        <ion-input formControlName="email" type="email" required></ion-input>
       </ion-item>
     </div>
 
     <div *ngIf="mode === 'create'">
       <ion-item>
         <ion-label position="floating">Password</ion-label>
-        <ion-input [(ngModel)]="user.password" name="password" type="password" required></ion-input>
+        <ion-input formControlName="password" type="password" required></ion-input>
+      </ion-item>
+    </div>
+
+    <!-- Nuevo: Confirmar contraseña (requerido solo en crear) -->
+    <div *ngIf="mode === 'create'">
+      <ion-item>
+        <ion-label position="floating">Confirmar contraseña</ion-label>
+        <ion-input formControlName="confirm_password" type="password" required></ion-input>
       </ion-item>
     </div>
 
     <div>
       <ion-item>
         <ion-label position="floating">Teléfono</ion-label>
-        <ion-input [(ngModel)]="user.phone" name="phone" type="text"></ion-input>
+        <ion-input formControlName="phone" type="text"></ion-input>
       </ion-item>
     </div>
 
-    <ion-button expand="full" type="submit" shape="round" [disabled]="!user.first_name || !user.last_name || !user.email || (mode === 'create' && !user.password)" class="btn-login">
+    <div>
+      <ion-item>
+        <ion-select label="Tipo de documento" placeholder="Seleccione..." formControlName="document_type" required>
+          <ion-select-option value="CC">Cédula de Ciudadanía</ion-select-option>
+          <ion-select-option value="CE">Cédula de Extranjería</ion-select-option>
+          <ion-select-option value="PA">Pasaporte</ion-select-option>
+          <ion-select-option value="IE">Identificación Empresarial</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <div>
+      <ion-item>
+        <ion-label position="floating">Número de documento</ion-label>
+        <ion-input formControlName="document_number" type="text" required></ion-input>
+      </ion-item>
+    </div>
+
+    <div>
+      <ion-item>
+        <ion-label position="floating">Edad</ion-label>
+        <ion-input formControlName="age" type="number" required></ion-input>
+      </ion-item>
+    </div>
+
+    <!-- ubicacion -->
+    <div>
+      <ion-item>
+        <ion-select label="Ciudad de residencia" [interfaceOptions]="customDepartamentActionSheetOptions"
+          interface="modal" placeholder="Seleccione..." (ionChange)="fruitSelectionChanged($event.detail.value)" formControlName="departament">
+          <ion-select-option *ngFor="let Departament of valueDepartament" [value]="Departament.value">
+            {{ Departament.text }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+    <div>
+      <ion-item>
+        <ion-select label="Ciudad de residencia" [interfaceOptions]="customMunicipalityActionSheetOptions"
+          interface="modal" placeholder="Seleccione..." formControlName="municipality">
+          <ion-select-option *ngFor="let Municipality of valueMunicipality" [value]="Municipality.value">
+            {{ Municipality.text }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+    
+    <div>
+      <ion-item>
+        <ion-label position="floating">Dirección</ion-label>
+        <ion-input formControlName="address" type="text" required></ion-input>
+      </ion-item>
+    </div>
+    <input type="hidden" formControlName="role" value="admin" />
+
+    <ion-button expand="full" type="submit" shape="round" [disabled]="registerForm.invalid" class="btn-login">
       {{ mode === 'create' ? 'Crear usuario' : 'Guardar cambios' }}
     </ion-button>
   </form>

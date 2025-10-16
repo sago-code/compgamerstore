@@ -9,9 +9,18 @@
       <ion-icon name="search-outline"></ion-icon>
     </ion-button>
 
-    <ion-input #searchInput id="search-input" class="search-input" type="text" placeholder="Buscar producto"
-      [class.active]="searchActive" [style.width]="searchActive ? '100%' : '0'" [attr.tabindex]="searchActive ? 0 : -1"
-      [readonly]="!searchActive" [autofocus]="searchActive">
+    <ion-input
+      #searchInput
+      id="search-input"
+      class="search-input"
+      type="text"
+      placeholder="Buscar usuario"
+      (ionInput)="onSearchInput($event)"
+      [class.active]="searchActive"
+      [style.width]="searchActive ? '100%' : '0'"
+      [attr.tabindex]="searchActive ? 0 : -1"
+      [readonly]="!searchActive"
+      [autofocus]="searchActive">
       <ion-icon name="search-outline" slot="start"></ion-icon>
     </ion-input>
   </div>
@@ -68,7 +77,18 @@
                 style="max-width: max-content; margin:0px;">
                 <ion-icon name="pencil-sharp"></ion-icon>
               </ion-button>
-
+              <ion-button expand="full" class="btn-desactivate"
+                  *ngIf="!user.deleted_at"
+                  (click)="softDeleteUser(user)"
+                  style="max-width: max-content; margin:0px;">
+                  <ion-icon name="power"></ion-icon>
+                </ion-button>
+                <ion-button expand="full" class="btn-desactivate btn-restore"
+                  *ngIf="user.deleted_at"
+                  (click)="restoreUser(user)"
+                  style="max-width: max-content; margin:0px;">
+                  <ion-icon name="refresh"></ion-icon>
+                </ion-button>
             </div>
           </td>
         </tr>

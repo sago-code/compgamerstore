@@ -4,6 +4,9 @@ import { IonInput, AlertController  } from '@ionic/angular';
 import { ProductsService } from '../../services/firebase/products/products.service';
 import { HardwareProduct, Product } from 'src/app/models/product.model';
 import { LoadingService } from 'src/app/loading-service';
+import { Subscription } from 'rxjs';
+import { ProductsSearchService } from 'src/app/services/state/products-search.service';
+import { ProductsStateService } from 'src/app/services/state/products-state.service';
 
 @Component({
   selector: 'app-products',
@@ -15,6 +18,7 @@ export class ProductsPage implements OnInit, OnDestroy {
   searchActive = false;
   pageTitle = 'Productos';
   private removeClickListener: (() => void) | null = null;
+  private productsSub?: Subscription;
 
   @ViewChild('searchInput', { read: IonInput }) searchInput!: IonInput;
   @ViewChild('header') headerRef!: ElementRef<HTMLElement>;
@@ -29,18 +33,33 @@ export class ProductsPage implements OnInit, OnDestroy {
     private router: Router,
     private productsService: ProductsService,
     private loadingService: LoadingService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private productsSearch: ProductsSearchService,
+    private productsState: ProductsStateService
   ) {}
 
   ngOnInit() {
-    // 1. Cargo productos apenas entro
-    this.loadProducts();
+    // 1. Suscripción al buscador centralizado
+    this.productsSub = this.productsSearch.results$.subscribe({
+      next: (list) => {
+        this.allProducts = list;
+        this.applyFilter();
+      },
+      error: (err) => console.error('Error searching products:', err),
+    });
 
     // 2. Escucho cambios en queryParams y filtro
     this.route.queryParams.subscribe(params => {
       this.currentType = params['type'] || null;
       this.applyFilter();
     });
+  }
+
+  // Nuevo: refresca la lista cuando la página será mostrada nuevamente
+  ionViewWillEnter() {
+    this.productsSearch.refresh();
+    // Si filtras por tipo en queryParams, esto asegura re-fetch y re-aplicación del filtro
+    this.applyFilter();
   }
 
   async loadProducts() {
@@ -72,15 +91,6 @@ export class ProductsPage implements OnInit, OnDestroy {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
-  navigateToCreate() {
-    this.router.navigate(['/products/formproduct'], {
-      queryParams: {
-        mode: 'create',
-        type: this.currentType || 'general'
-      }
-    });
-  }
-
   activarBusqueda() {
     this.searchActive = !this.searchActive;
     if (this.searchActive) {
@@ -99,6 +109,14 @@ export class ProductsPage implements OnInit, OnDestroy {
     }
   }
 
+  onSearchInput(evt: Event) {
+    const ce = evt as CustomEvent<{ value: string }>;
+    const value =
+      (ce.detail && typeof ce.detail.value === 'string' ? ce.detail.value : '') ||
+      ((evt.target as HTMLInputElement)?.value ?? '');
+    this.productsSearch.setTerm(value);
+  }
+
   cerrarBusqueda() {
     this.searchActive = false;
     setTimeout(async () => {
@@ -108,6 +126,9 @@ export class ProductsPage implements OnInit, OnDestroy {
         nativeInput.blur();
       }
     }, 0);
+
+    // Reinicia el término de búsqueda
+    this.productsSearch.clear();
 
     if (this.removeClickListener) {
       this.removeClickListener();
@@ -119,14 +140,37 @@ export class ProductsPage implements OnInit, OnDestroy {
     if (this.removeClickListener) {
       this.removeClickListener();
     }
+    this.productsSub?.unsubscribe();
+  }
+
+  navigateToCreate() {
+    // Desenfoca el elemento activo para evitar warnings al ocultar la página
+    const activeEl = document.activeElement as HTMLElement | null;
+    activeEl?.blur();
+
+    // Opcional: cerrar el buscador si está abierto
+    this.cerrarBusqueda();
+
+    this.productsState.setMode('create');
+    this.productsState.setProductId(null);
+    this.productsState.setType(this.currentType || 'general');
+
+    this.router.navigate(['/products/formproduct']);
   }
 
   editProduct(product: any) {
-    this.router.navigateByUrl('/products/formproduct', { skipLocationChange: true }).then(() => {
-      this.router.navigate(['/products/formproduct'], {
-        queryParams: { mode: 'edit', uid: product.uid, type: product.type }
-      });
-    });
+    // Desenfoca el elemento activo para evitar warnings al ocultar la página
+    const activeEl = document.activeElement as HTMLElement | null;
+    activeEl?.blur();
+
+    // Opcional: cerrar el buscador si está abierto
+    this.cerrarBusqueda();
+
+    this.productsState.setMode('edit');
+    this.productsState.setProductId(product.uid);
+    this.productsState.setType(product.type);
+
+    this.router.navigate(['/products/formproduct']);
   }
 
   async softDeleteProduct(product: Product) {

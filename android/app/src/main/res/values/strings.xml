@@ -4,4 +4,5 @@
     <string name="title_activity_main">compgamerstore</string>
     <string name="package_name">com.idiottecnology.compgamerstore</string>
     <string name="custom_url_scheme">com.idiottecnology.compgamerstore</string>
+    <string name="server_client_id">840480061585-volnvfuoup0in8jbkrg2he59109p1arp.apps.googleusercontent.com</string>
 </resources>

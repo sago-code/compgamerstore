@@ -1,0 +1,69 @@
+.profile-item {
+    width: 90%;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+}
+
+.email-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.btn-edit {
+    --background: var(--ion-color-quaternary);
+    --color: var(--ion-color-sextonary);
+
+    --border-radius: 0px;
+    --border-color: transparent;
+    --border-style: solid;
+    --border-width: 0px;
+    border-radius: 10px !important;
+
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    border-radius: 6px !important;
+    overflow: hidden;
+    --transition: all 0.2s ease-in-out;
+}
+
+/* Nuevo: sección de detalles y acciones */
+.details-list {
+    padding: 8px 12px;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    justify-content: flex-end;
+}
+
+.edit-fab {
+    z-index: 1000;
+}
+
+ion-note {
+    font-size: 25px;
+}
+
+ion-card {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    ion-note {
+        font-size: 18px;
+    }
+}

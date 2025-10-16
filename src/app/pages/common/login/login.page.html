@@ -99,20 +99,22 @@
         </div>
         <!-- ubicacion -->
         <div>
+          <!-- Registro: Departamento -->
           <ion-item>
             <ion-select label="Ciudad de residencia" [interfaceOptions]="customDepartamentActionSheetOptions"
               interface="modal" placeholder="Seleccione..." (ionChange)="fruitSelectionChanged($event.detail.value)" formControlName="departament">
-              <ion-select-option *ngFor="let Departament of valueDepartament" [value]="Departament.value">
+              <ion-select-option *ngFor="let Departament of valueDepartament" [value]="Departament.text">
                 {{ Departament.text }}
               </ion-select-option>
             </ion-select>
           </ion-item>
         </div>
         <div>
+          <!-- Registro: Municipio -->
           <ion-item>
             <ion-select label="Ciudad de residencia" [interfaceOptions]="customMunicipalityActionSheetOptions"
               interface="modal" placeholder="Seleccione..." formControlName="municipality">
-              <ion-select-option *ngFor="let Municipality of valueMunicipality" [value]="Municipality.value">
+              <ion-select-option *ngFor="let Municipality of valueMunicipality" [value]="Municipality.text">
                 {{ Municipality.text }}
               </ion-select-option>
             </ion-select>
@@ -131,7 +133,7 @@
           </ion-item>
         </div>
         <!-- Campo oculto para el rol (por defecto admin) -->
-        <input type="hidden" formControlName="role" value="admin" />
+        <input type="hidden" formControlName="role" value="cliente" />
         <div class="button-register">
           <ion-button expand="full" type="submit" shape="round" [disabled]="!registerForm.valid">Registrarse</ion-button>
           <ion-button expand="full" type="button" shape="round" class="clancelar" (click)="activarLoginForm()">cancelar</ion-button>

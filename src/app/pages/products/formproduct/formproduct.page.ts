@@ -4,6 +4,7 @@ import { AlertController } from '@ionic/angular';
 import { ProductsService } from 'src/app/services/firebase/products/products.service';
 import { DesktopProduct, HardwareProduct, LaptopProduct, Product } from 'src/app/models/product.model';
 import imageCompression from 'browser-image-compression';
+import { ProductsStateService } from 'src/app/services/state/products-state.service';
 
 @Component({
   selector: 'app-formproduct',
@@ -13,7 +14,18 @@ import imageCompression from 'browser-image-compression';
 })
 export class FormproductPage implements OnInit {
   pageTitle = 'Crear producto';
-  product!: Product;
+  product: Product = {
+    uid: crypto.randomUUID(),
+    product_name: '',
+    product_image: '',
+    description: '',
+    price: 0,
+    stock: 0,
+    type: '',
+    created_at: null as any,
+    updated_at: null as any,
+    deleted_at: null
+  };
   photoPreview: string | null = null;
   mode: 'create' | 'edit' = 'create';
   originalUid: string | null = null;
@@ -22,54 +34,59 @@ export class FormproductPage implements OnInit {
     private route: ActivatedRoute,
     private alertCtrl: AlertController,
     private productsService: ProductsService,
-    private router: Router
+    private router: Router,
+    private productsState: ProductsStateService
   ) {}
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(async params => {
-      const mode = params['mode'];
-      const uid = params['uid'];
-      const type = params['type'];
+  async ngOnInit() {
+    // Leer estado compartido (preferido) y hacer fallback a queryParams sólo para "type"
+    const stateMode = this.productsState.getCurrentMode();
+    const stateUid = this.productsState.getCurrentProductId();
+    const stateType = this.productsState.getCurrentType();
+    const qpType = this.route.snapshot.queryParamMap.get('type');
 
-      if (mode === 'edit' && uid) {
-        this.pageTitle = 'Editar producto';
-        this.mode = 'edit';
-        this.originalUid = uid;
+    if (stateMode === 'edit' && stateUid) {
+      this.pageTitle = 'Editar producto';
+      this.mode = 'edit';
+      this.originalUid = stateUid;
 
-        try {
-          const product = await this.productsService.getProductByUid(uid);
-          if (product) {
-            this.product = product;
-            this.photoPreview = product.product_image || null;
-            if (this.isDesktop(product) || this.isLaptop(product)) {
-              if ('brand_processor' in product) {
-                (this.product as DesktopProduct | LaptopProduct).brand_processor = product.brand_processor || '';
-              }
-              if ('reference_processor' in product) {
-                (this.product as DesktopProduct | LaptopProduct).reference_processor = product.reference_processor || '';
-              }
+      try {
+        const product = await this.productsService.getProductByUid(stateUid);
+        if (product) {
+          this.product = product;
+          this.photoPreview = product.product_image || null;
+
+          if (this.isDesktop(product) || this.isLaptop(product)) {
+            if ('brand_processor' in product) {
+              (this.product as DesktopProduct | LaptopProduct).brand_processor = product.brand_processor || '';
+            }
+            if ('reference_processor' in product) {
+              (this.product as DesktopProduct | LaptopProduct).reference_processor = product.reference_processor || '';
             }
           }
-        } catch (err) {
-          console.error('Error cargando producto:', err);
         }
-      } else {
-        this.pageTitle = 'Crear producto';
-        this.mode = 'create';
-        this.product = {
-          uid: crypto.randomUUID(),
-          product_name: '',
-          product_image: '',
-          description: '',
-          price: 0,
-          stock: 0,
-          type: type || '',
-          created_at: null as any,
-          updated_at: null as any,
-          deleted_at: null
-        };
+      } catch (err) {
+        console.error('Error cargando producto:', err);
+        await this.showAlert('Error', 'No se pudo cargar el producto a editar.');
       }
-    });
+    } else {
+      this.pageTitle = 'Crear producto';
+      this.mode = 'create';
+      const resolvedType = stateType || qpType || '';
+
+      this.product = {
+        uid: crypto.randomUUID(),
+        product_name: '',
+        product_image: '',
+        description: '',
+        price: 0,
+        stock: 0,
+        type: resolvedType,
+        created_at: null as any,
+        updated_at: null as any,
+        deleted_at: null
+      };
+    }
   }
 
   // Type guards
@@ -131,15 +148,15 @@ export class FormproductPage implements OnInit {
     try {
       if (this.mode === 'edit' && this.originalUid) {
         await this.productsService.updateProduct(this.originalUid, this.product);
-        await alert('Producto actualizado correctamente.');
+        await this.showAlert('Éxito', 'Producto actualizado correctamente.');
       } else {
         await this.productsService.createProduct(this.product);
-        await alert('Producto guardado correctamente.');
+        await this.showAlert('Éxito', 'Producto guardado correctamente.');
       }
 
-      this.router.navigate(['/products'], { queryParams: { type: this.product.type } }).then(() => {
-        window.location.reload();
-      });
+      // Limpia el estado y navega sin recargar toda la página
+      this.productsState.clear();
+      this.router.navigate(['/products'], { queryParams: { type: this.product.type } });
     } catch (error: any) {
       await this.showAlert('Error', error.message || 'Ocurrió un error al guardar el producto.');
     }

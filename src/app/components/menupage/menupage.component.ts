@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ElementRef, Renderer2, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from "@ionic/angular";
+import { IonicModule, AlertController } from "@ionic/angular";
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { SessionService } from 'src/app/services/session.service';
 import { filter } from 'rxjs/operators';
@@ -31,7 +31,8 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     private renderer: Renderer2,
     private session: SessionService,
     private router: Router,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -41,12 +42,13 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.navSub = this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
-      this.updateSession();
+        this.updateSession();
 
-      setTimeout(() => {
-        this.navNow();
-      }, 100);
-    });
+        setTimeout(() => {
+          this.defocusHiddenPageElement();
+          this.navNow();
+        }, 100);
+      });
 
     // Ejecutar navNow también al cargar la página (por recarga o redirección)
     this.navNow();
@@ -148,30 +150,70 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
 
+  // Mostrar confirmación y ejecutar logout sólo si el usuario acepta
+  async confirmLogout() {
+    const host = this.el.nativeElement as HTMLElement;
+    const ul = host.querySelector('ul:not([hidden])');
+    if (ul) {
+      const items = ul.querySelectorAll('.list') as NodeListOf<HTMLElement>;
+      items.forEach(item => item.classList.remove('active'));
+      const targetLi = ul.querySelector('.logoutNav') as HTMLElement | null;
+      if (targetLi) {
+        targetLi.classList.add('active');
+        this.onSoping(false);
+      }
+    }
+
+    const alert = await this.alertController.create({
+      header: 'Cerrar sesión',
+      message: '¿Quieres cerrar sesión?',
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        { text: 'Cerrar sesión', role: 'confirm' }
+      ]
+    });
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+    if (role === 'confirm') {
+      // Ejecutar el cierre de sesión existente
+      await this.logout();
+    } else {
+      // Restaurar el item activo acorde a la ruta actual
+      this.navNow();
+    }
+  }
+
   async logout() {
     const host = this.el.nativeElement as HTMLElement;
-
     const ul = host.querySelector('ul:not([hidden])');
     if (!ul) return;
+
     const items = ul.querySelectorAll('.list') as NodeListOf<HTMLElement>;
 
     const handler = () => {
       items.forEach(item => item.classList.remove('active'));
-
-      const anchor = ul.querySelector('.logout');
-      const targetLi = anchor.closest('.list') as HTMLElement | null;
+      // Usar selector común para ambos menús (admin y cliente)
+      const targetLi = ul.querySelector('.logoutNav') as HTMLElement | null;
       if (targetLi) {
         targetLi.classList.add('active');
         this.onSoping(false);
       }
     };
+
     handler();
+
+    // Ejecutar limpieza y logout de Firebase
     timer(10).subscribe(async () => {
-      await this.session.clearSession();
-      alert('cierras sesión');
-      getAuth().signOut().then(() => {
-        this.router.navigateByUrl('/home', { replaceUrl: true });
-      });
+      try {
+        await this.session.clearSession();
+        await getAuth().signOut();
+      } finally {
+        // Navegar a home y forzar recarga para reiniciar completamente la UI
+        this.router.navigateByUrl('/home', { replaceUrl: true }).then(() => {
+          setTimeout(() => window.location.reload(), 50);
+        });
+      }
     });
   }
 
@@ -242,23 +284,42 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
+  private defocusHiddenPageElement() {
+    const activeEl = document.activeElement as HTMLElement | null;
+    if (!activeEl) return;
+    const hiddenAncestor = activeEl.closest('.ion-page-hidden,[aria-hidden="true"]');
+    if (hiddenAncestor) {
+      activeEl.blur();
+      const visiblePage = document.querySelector('.ion-page:not(.ion-page-hidden)') as HTMLElement | null;
+      if (visiblePage) {
+        if (!visiblePage.hasAttribute('tabindex')) visiblePage.setAttribute('tabindex', '-1');
+        visiblePage.focus();
+      }
+    }
+  }
+
   navNow() {
     this.onSoping(false);
+    this.defocusHiddenPageElement();
     const host = this.el.nativeElement as HTMLElement;
     const ul = host.querySelector('ul:not([hidden])');
     if (!ul) return;
     const items = ul.querySelectorAll('.list') as NodeListOf<HTMLElement>;
     items.forEach(item => item.classList.remove('active'));
+ 
+    // Obtiene la ruta actual, elimina query params y toma solo el primer segmento
+    const url = this.router.url; // e.g. "/admin-users/form-users?mode=create"
+    const pathOnly = url.split('?')[0]; // "/admin-users/form-users"
+    const firstSegment = pathOnly.replace(/^\//, '').split('/')[0] || 'home'; // "admin-users"
+    const safeClass = `${firstSegment}Nav`; // "admin-usersNav"
 
-    // Obtiene la ruta actual y la corta antes de un caracter específico (por ejemplo, '/')
-    let rutaActual = this.router.url.replace('/', '');
-    const index = rutaActual.indexOf('?');
-    if (index !== -1) {
-      rutaActual = rutaActual.substring(0, index);
-    }
-    const itemNow = ul.querySelector('.' + rutaActual + 'Nav') as HTMLElement | null;
+    const itemNow = ul.querySelector(`.${safeClass}`) as HTMLElement | null;
     if (itemNow) {
       itemNow.classList.add('active');
+    } else {
+      // Fallback: marcar home si no se encuentra coincidencia
+      const defaultItem = ul.querySelector('.homeNav') as HTMLElement | null;
+      if (defaultItem) defaultItem.classList.add('active');
     }
 
     const handler = () => {
@@ -268,14 +329,15 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
       console.log(onSoping1);
       if (navSoping2) {
         navSoping2.classList.toggle('navSopingActive2');
-      }else if (onSoping1) {
+      } else if (onSoping1) {
         onSoping1.classList.toggle('navSopingActive1');
-      }else if (navSoping) {
+      } else if (navSoping) {
         navSoping.classList.toggle('navSopingActive');
       }
     };
 
-    if (rutaActual == 'products') {
+    // Activa el submenú solo en la sección de productos
+    if (firstSegment === 'products') {
       handler();
     }
   }

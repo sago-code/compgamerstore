@@ -52,13 +52,14 @@
       <a href="#">
         <span class="icon"><ion-icon name="cart"></ion-icon></span>
       </a>
+    </li> <!-- ← Corrección: cerrar li de carrito -->
     <li class="list perfilNav">
-      <a href="#">
+      <a [routerLink]="['/perfil']">
         <span class="icon"><ion-icon name="person"></ion-icon></span>
       </a>
     </li>
     <li class="list logoutNav">
-      <a href="javascript:void(0)" role="button" tabindex="0" (click)="logout()">
+      <a href="javascript:void(0)" role="button" tabindex="0" (click)="confirmLogout()">
         <span class="icon"><ion-icon name="power"></ion-icon></span>
       </a>
     </li>
@@ -83,15 +84,15 @@
       </a>
     </li>
     <li class="list perfilNav">
-      <a href="#">
+      <a [routerLink]="['/perfil']">
         <span class="icon"><ion-icon name="person"></ion-icon></span>
       </a>
     </li>
-    <li class="logout list logoutNav">
-      <a href="javascript:void(0)" role="button" tabindex="0" (click)="logout()">
-        <span class="icon"><ion-icon name="power"></ion-icon></span>
-      </a>
-    </li>
+      <li class="list logoutNav">
+        <a href="javascript:void(0)" role="button" tabindex="0" (click)="confirmLogout()">
+          <span class="icon"><ion-icon name="power"></ion-icon></span>
+        </a>
+      </li>
     <div class="indicator"><span></span></div>
   </ul>
 </div>

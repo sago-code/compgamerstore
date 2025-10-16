@@ -125,4 +125,18 @@ export class ProductsService {
   async hardDeleteProduct(uid: string): Promise<void> {
     await deleteDoc(doc(this.db, 'products', uid));
   }
+
+  async searchProducts(term: string): Promise<Product[]> {
+    const q = (term ?? '').trim().toLowerCase();
+    if (!q) {
+      return this.getProducts();
+    }
+    const all = await this.getProducts();
+    return all.filter(p => {
+      const name = (p.product_name || '').toLowerCase();
+      const desc = (p.description || '').toLowerCase();
+      const type = (p.type || '').toLowerCase();
+      return name.includes(q) || desc.includes(q) || type.includes(q);
+    });
+  }
 }

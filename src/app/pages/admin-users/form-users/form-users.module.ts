@@ -8,10 +8,13 @@ import { FormUsersPageRoutingModule } from './form-users-routing.module';
 
 import { FormUsersPage } from './form-users.page';
 
+import { ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     FormUsersPageRoutingModule
   ],

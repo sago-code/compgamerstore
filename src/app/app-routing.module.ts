@@ -22,6 +22,10 @@ const routes: Routes = [
     path: 'admin-users',
     loadChildren: () => import('./pages/admin-users/admin-users.module').then( m => m.AdminUsersPageModule)
   },
+  {
+    path: 'perfil',
+    loadChildren: () => import('./pages/common/perfil/perfil.module').then( m => m.PerfilPageModule)
+  },
 
 ];
 

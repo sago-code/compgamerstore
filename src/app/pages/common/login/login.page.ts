@@ -37,7 +37,7 @@ export class LoginPage implements OnInit {
     departament: new FormControl('', [Validators.required]),
     municipality: new FormControl('', [Validators.required]),
     address: new FormControl('', [Validators.required]),
-    role: new FormControl('admin', [Validators.required]),
+    role: new FormControl('cliente', [Validators.required]),
     photo: new FormControl(null)
   });
 
@@ -84,10 +84,30 @@ export class LoginPage implements OnInit {
   ];
   valueMunicipality : ItemMunicipality[] = this.valueMunicipalityTotal;
 
-  fruitSelectionChanged(fruits: string[]) {
-    this.valueMunicipality = this.valueMunicipalityTotal.filter(municipality =>
-      fruits.includes(municipality.codDepartament)
-    );
+  private getDepartamentCodeByName(name?: string | null): string | null {
+    if (!name) return null;
+    const found = this.valueDepartament.find(d => d.text === name);
+    return found?.value ?? null;
+  }
+
+  // Si necesitas hacer el camino inverso en algún momento:
+  private getDepartamentNameByCode(code?: string | null): string | null {
+    if (!code) return null;
+    const found = this.valueDepartament.find(d => d.value === code);
+    return found?.text ?? null;
+  }
+
+  // Mapea código de municipio a nombre (por si cargas códigos)
+  private getMunicipalityNameByCode(code?: string | null): string | null {
+    if (!code) return null;
+    const found = this.valueMunicipalityTotal.find(m => m.value === code);
+    return found?.text ?? null;
+  }
+
+  // Filtra municipios según el departamento seleccionado (recibe NOMBRE y lo traduce a código)
+  fruitSelectionChanged(departamentName: string) {
+    const depCode = this.getDepartamentCodeByName(departamentName) ?? departamentName;
+    this.valueMunicipality = this.valueMunicipalityTotal.filter(m => m.codDepartament === depCode);
   }
 
   // Activa el formulario de inicio de sesión
@@ -176,12 +196,11 @@ export class LoginPage implements OnInit {
 
     const form = this.registerForm.value as any;
 
-    if (form.password !== form.confirm_password) {
-      alert('Las contraseñas no coinciden.');
-      return;
-    }
-
-    this.loadingRegister = true;
+    // Asegura que se guarden nombres (si vinieran códigos, los convierto)
+    const departamentName =
+      this.getDepartamentNameByCode(form.departament) ?? form.departament;
+    const municipalityName =
+      this.getMunicipalityNameByCode(form.municipality) ?? form.municipality;
 
     const user = {
       uid: '',
@@ -193,8 +212,8 @@ export class LoginPage implements OnInit {
       age: form.age,
       document_type: form.document_type,
       document_number: form.document_number,
-      departament: form.departament,
-      municipality: form.municipality,
+      departament: departamentName,   // guarda el nombre
+      municipality: municipalityName, // guarda el nombre
       phone: form.phone,
       direction: form.address,
       role: form.role,
@@ -202,6 +221,13 @@ export class LoginPage implements OnInit {
       updated_at: null,
       deleted_at: null
     } as any;
+
+    if (form.password !== form.confirm_password) {
+      alert('Las contraseñas no coinciden.');
+      return;
+    }
+
+    this.loadingRegister = true;
 
     try {
       let uid;
