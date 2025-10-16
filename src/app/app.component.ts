@@ -44,11 +44,13 @@ export class AppComponent implements OnInit {
     });
   }
 
+  // Clase: AppComponent
   private async initializeGoogle() {
     await SocialLogin.initialize({
       google: {
         webClientId: '840480061585-volnvfuoup0in8jbkrg2he59109p1arp.apps.googleusercontent.com',
-        mode: 'online', // 'online' = obtiene ID Token
+        iOSClientId: '840480061585-71s9v9ng34na3ll2q140ll8vlgjbrul3.apps.googleusercontent.com',
+        mode: 'online',
       },
     });
   }
