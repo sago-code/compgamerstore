@@ -1,0 +1,94 @@
+<ion-header [translucent]="true">
+  <app-menupage></app-menupage>
+  <ion-toolbar>
+    <ion-title>Carrito</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="cart-content">
+  <ng-container *ngIf="!isEmpty; else empty">
+    <ion-list>
+      <ion-item *ngFor="let item of cart?.items; trackBy: trackByProduct">
+        <ion-thumbnail slot="start">
+          <img
+            [src]="productImage(item.productId)"
+            [alt]="item.name" />
+        </ion-thumbnail>
+
+        <ion-label>
+          <h2>{{ item.name }}</h2>
+          <p>{{ item.unitPrice | currency }}</p>
+
+          <div class="quantity-controls">
+            <ion-button size="small" fill="clear" (click)="decrease(item)">
+              <ion-icon name="remove-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-badge color="dark">{{ item.quantity }}</ion-badge>
+            <ion-button size="small" fill="clear" color="primary" (click)="increase(item)">
+              <ion-icon name="add-circle-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-label>
+
+        <ion-note slot="end" color="medium">
+          {{ (item.unitPrice * item.quantity) | currency }}
+        </ion-note>
+
+        <ion-button slot="end" fill="clear" color="danger" (click)="remove(item)" aria-label="Eliminar">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+
+    <ion-card class="summary-card">
+      <ion-card-header>
+        <ion-card-title>Resumen</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>{{ cart?.subtotal | currency }}</span>
+        </div>
+
+        <div class="summary-row total">
+          <strong>Total</strong>
+          <strong>{{ cart?.total | currency }}</strong>
+        </div>
+
+        <!-- Mensaje si NO hay sesión -->
+        <div *ngIf="!isLoggedIn" class="login-required">
+          <ion-text color="warning">
+            Debes iniciar sesión para terminar el pedido.
+          </ion-text>
+        </div>
+
+        <div class="actions">
+          <ion-button color="medium" fill="outline" (click)="clear()">
+            Vaciar carrito
+          </ion-button>
+
+          <!-- Si hay sesión: checkout; si no: CTA login -->
+          <ng-container *ngIf="isLoggedIn; else loginAction">
+            <ion-button color="primary" (click)="checkout()">
+              Proceder al pago
+            </ion-button>
+          </ng-container>
+          <ng-template #loginAction>
+            <ion-button color="primary" (click)="goToLogin()">
+              Inicia sesión para terminar pedido
+            </ion-button>
+          </ng-template>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <ng-template #empty>
+    <div class="cart-empty">
+      <ion-icon name="cart-outline"></ion-icon>
+      <h3>Tu carrito está vacío</h3>
+      <p>Agrega productos desde el inicio.</p>
+      <ion-button routerLink="/home" color="primary">Ver productos</ion-button>
+    </div>
+  </ng-template>
+</ion-content>

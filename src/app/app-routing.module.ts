@@ -26,6 +26,18 @@ const routes: Routes = [
     path: 'perfil',
     loadChildren: () => import('./pages/common/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
+  {
+    path: 'cart',
+    loadChildren: () => import('./pages/cart/cart.module').then( m => m.CartPageModule)
+  },
+  {
+    path: 'shop-product',
+    loadChildren: () => import('./pages/shop-product/shop-product.module').then( m => m.ShopProductPageModule)
+  },
+  {
+    path: 'shop-products',
+    loadChildren: () => import('./pages/shop-products/shop-products.module').then( m => m.ShopProductsPageModule)
+  },
 
 ];
 

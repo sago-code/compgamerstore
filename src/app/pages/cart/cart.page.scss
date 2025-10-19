@@ -1,0 +1,52 @@
+// ... existing code ...
+.cart-content {
+  padding: 12px 12px 80px;
+}
+
+.quantity-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.summary-card {
+  margin: 12px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.summary-row.total {
+  border-top: 1px solid var(--ion-color-step-150, #e5e5e5);
+  margin-top: 8px;
+  padding-top: 12px;
+}
+
+.login-required {
+  margin-top: 8px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.cart-empty {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 40px 16px;
+  color: var(--ion-color-medium);
+}
+
+.cart-empty ion-icon {
+  font-size: 72px;
+  color: var(--ion-color-primary);
+  margin-bottom: 8px;
+}
+// ... existing code ...

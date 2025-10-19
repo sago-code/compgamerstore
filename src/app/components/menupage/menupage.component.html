@@ -6,7 +6,6 @@
 </div>
 <!-- Navigation menu at top -->
 <div class="navigation">
-  <!-- Estado 1: Sin sesión -->
   <ul *ngIf="!isAuth">
     <li class="list active homeNav">
       <a [routerLink]="['/home']" data-route>
@@ -23,9 +22,12 @@
         <span class="icon"><ion-icon name="basket"></ion-icon></span>
       </a>
     </li>
-    <li class="list carritoNav">
-      <a href="#">
-        <span class="icon"><ion-icon name="cart"></ion-icon></span>
+    <li class="list cartNav">
+      <a [routerLink]="['/cart']" data-route>
+        <span class="icon">
+          <ion-icon name="cart"></ion-icon>
+          <ion-badge *ngIf="cartCount > 0" class="cart-badge" color="secondary">{{ cartCount }}</ion-badge>
+        </span>
       </a>
     </li>
     <li class="list loginNav">
@@ -36,7 +38,6 @@
     <div class="indicator"><span></span></div>
   </ul>
 
-  <!-- Estado 2: Sesión activa - Cliente cliente -->
   <ul *ngIf="isAuth && role === 'cliente'">
     <li class="list active homeNav">
       <a [routerLink]="['/home']" data-route>
@@ -48,9 +49,12 @@
         <span class="icon"><ion-icon name="basket"></ion-icon></span>
       </a>
     </li>
-    <li class="list carritoNav">
-      <a href="#">
-        <span class="icon"><ion-icon name="cart"></ion-icon></span>
+    <li class="list cartNav">
+      <a [routerLink]="['/cart']" data-route>
+        <span class="icon">
+          <ion-icon name="cart"></ion-icon>
+          <ion-badge *ngIf="cartCount > 0" class="cart-badge" color="secondary">{{ cartCount }}</ion-badge>
+        </span>
       </a>
     </li> <!-- ← Corrección: cerrar li de carrito -->
     <li class="list perfilNav">

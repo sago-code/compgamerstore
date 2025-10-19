@@ -4,9 +4,10 @@ import { IonicModule, AlertController } from "@ionic/angular";
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { SessionService } from 'src/app/services/session.service';
 import { filter } from 'rxjs/operators';
-import { timer } from 'rxjs';
+import { timer, Subscription } from 'rxjs';
 import { getAuth } from 'firebase/auth';
 import { LoadingService } from 'src/app/loading-service';
+import { CartSharedService } from 'src/app/services/firebase/cart/cart-shared.service';
 
 @Component({
   selector: 'app-menupage',
@@ -26,13 +27,18 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
   role: string | null = null;
   loadingActive = false;
 
+  // Contador del carrito
+  cartCount = 0;
+  private cartCountSub?: Subscription;
+
   constructor(
     private el: ElementRef<HTMLElement>,
     private renderer: Renderer2,
     private session: SessionService,
     private router: Router,
     private loadingService: LoadingService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private cartShared: CartSharedService
   ) {}
 
   ngOnInit() {
@@ -58,6 +64,10 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.toggleLoading(active);
     });
 
+    // Suscribirse al contador del carrito
+    this.cartCountSub = this.cartShared.itemsCount$.subscribe(count => {
+      this.cartCount = count;
+    });
   }
 
   async updateSession() {
@@ -147,6 +157,7 @@ export class MenupageComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.removeListeners.forEach((off) => off());
     this.removeListeners = [];
     if (this.navSub) this.navSub.unsubscribe();
+    if (this.cartCountSub) this.cartCountSub.unsubscribe();
   }
 
 

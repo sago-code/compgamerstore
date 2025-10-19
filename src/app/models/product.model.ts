@@ -45,3 +45,27 @@ export interface HardwareProduct extends Product {
   color: string;
   dimensions: string;
 }
+
+// Modelo de carrito
+export interface CartItem {
+  productId: string;
+  name: string;
+  image?: string;
+  quantity: number;
+  unitPrice: number;
+  currency?: string;
+  type?: Product['type'];
+  added_at?: FieldValue;
+}
+
+export interface Cart {
+  id: string;
+  userId: string | null;
+  status: 'active' | 'converted' | 'abandoned';
+  items: CartItem[];
+  subtotal: number;
+  total: number;
+  currency: string;
+  created_at: FieldValue;
+  updated_at: FieldValue;
+}

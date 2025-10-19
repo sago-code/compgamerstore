@@ -53,6 +53,8 @@
 
       <section class="promo-carousel">
         <swiper-container
+          #promoSwiper
+          init="false"
           class="home-swiper"
           slides-per-view="1"
           loop="true"
@@ -120,12 +122,13 @@
           </ion-card-content>
         </ion-card>
       </section>
-      <!-- Sección existente: “Algunos de nuestros productos” -->
       <section>
         <ion-title>
           Algunos de nuestros productos
         </ion-title>
         <swiper-container
+          #productsSwiper
+          init="false"
           slides-per-view="1"
           loop="true"
           autoplay="false"
@@ -135,11 +138,24 @@
         >
           <!-- Reemplazo de slides estáticos por dinámicos -->
           <swiper-slide *ngFor="let product of lastProducts">
-            <div class="slide">
+            <div class="slide" style="position: relative;">
+              <!-- Controles de carrito -->
+              <div class="cart-controls"
+                   style="position:absolute; top:8px; right:8px; display:flex; gap:6px; z-index:2; pointer-events:auto;">
+                <ion-button size="small" fill="clear" color="medium" (click)="decreaseQty(product)">
+                  <ion-icon name="remove-circle-outline"></ion-icon>
+                </ion-button>
+                <ion-badge color="dark">{{ cartQuantity(product.uid) || 0 }}</ion-badge>
+                <ion-button size="small" fill="clear" color="primary" (click)="increaseQty(product)">
+                  <ion-icon name="add-circle-outline"></ion-icon>
+                </ion-button>
+              </div>
+  
               <img
                 [src]="product.product_image || 'assets/placeholder-product.png'"
                 [alt]="product.product_name"
                 loading="lazy"
+                style="width:100%; height:100%; object-fit:cover;"
               />
               <div class="slide-overlay">
                 <h3>{{ product.product_name }}</h3>
