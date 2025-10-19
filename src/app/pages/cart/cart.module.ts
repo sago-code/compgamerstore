@@ -15,7 +15,7 @@ import { MenupageComponent } from 'src/app/components/menupage/menupage.componen
     FormsModule,
     IonicModule,
     CartPageRoutingModule,
-    MenupageComponent
+    MenupageComponent,
   ],
   declarations: [CartPage]
 })

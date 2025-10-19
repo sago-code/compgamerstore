@@ -18,7 +18,8 @@ const routes: Routes = [
   {
     path: 'products',
     loadChildren: () => import('./pages/products/products.module').then( m => m.ProductsPageModule)
-  },  {
+  },
+  {
     path: 'admin-users',
     loadChildren: () => import('./pages/admin-users/admin-users.module').then( m => m.AdminUsersPageModule)
   },
@@ -29,10 +30,6 @@ const routes: Routes = [
   {
     path: 'cart',
     loadChildren: () => import('./pages/cart/cart.module').then( m => m.CartPageModule)
-  },
-  {
-    path: 'shop-product',
-    loadChildren: () => import('./pages/shop-product/shop-product.module').then( m => m.ShopProductPageModule)
   },
   {
     path: 'shop-products',

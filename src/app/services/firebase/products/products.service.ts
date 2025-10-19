@@ -148,4 +148,11 @@ export class ProductsService {
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => doc.data() as Product);
   }
+
+  async getProductsByType(type: string): Promise<Product[]> {
+    const productsRef = collection(this.db, 'products');
+    const q = query(productsRef, where('type', '==', type));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => doc.data() as Product);
+  }
 }
