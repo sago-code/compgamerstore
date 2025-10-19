@@ -8,6 +8,8 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  limit,
+  orderBy,
   query,
   serverTimestamp,
   setDoc,
@@ -138,5 +140,12 @@ export class ProductsService {
       const type = (p.type || '').toLowerCase();
       return name.includes(q) || desc.includes(q) || type.includes(q);
     });
+  }
+
+  async getLastTenProducts(): Promise<Product[]> {
+    const productsRef = collection(this.db, 'products');
+    const q = query(productsRef, orderBy('created_at', 'desc'), limit(10));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => doc.data() as Product);
   }
 }

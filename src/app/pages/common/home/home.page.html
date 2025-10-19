@@ -1,36 +1,167 @@
 <ion-header [translucent]="true">
   <app-menupage></app-menupage>
-  <ion-toolbar>
-    <div>
-      <ion-title>
-        Home
-      </ion-title>
-      <ion-input></ion-input>
-    </div>
+  <ion-toolbar class="home-toolbar">
+    <ion-title>CompGamerStore</ion-title>
+    <ion-searchbar
+      class="home-searchbar"
+      placeholder="Buscar productos..."
+      animated="true"
+      debounce="300"
+      *ngIf="role !== 'admin'"
+      >
+    </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
+<ion-content [fullscreen]="true" class="home-content">
+  <!-- Vista pública: no logueado + cliente -->
+   <div *ngIf="role !== 'admin'">
+      <ng-container>
+        <section class="hero">
+          <div class="hero-bg"></div>
+          <div class="hero-content">
+            <h1>Mejora o consigue tu PC gamer</h1>
+            <p>Componentes de alto rendimiento, ofertas exclusivas y soporte experto.</p>
+            <div class="hero-actions">
+              <ion-button size="large" shape="round" color="primary">
+                Ver productos
+              </ion-button>
+              <ion-button fill="outline" shape="round" color="secondary">
+                Ver ofertas
+              </ion-button>
+            </div>
+          </div>
+        </section>
+      </ng-container>
 
-<ion-content [fullscreen]="true">
-  <div>
-  </div> 
+      <section class="categories">
+        <ion-chip>
+          <ion-icon name="laptop-outline"></ion-icon>
+          <ion-label>Laptops</ion-label>
+        </ion-chip>
+        <ion-chip>
+          <ion-icon name="desktop-outline"></ion-icon>
+          <ion-label>Escritorio</ion-label>
+        </ion-chip>
+        <!-- Unificado: Hardware + Periféricos -->
+        <ion-chip>
+          <ion-icon name="hardware-chip-outline"></ion-icon>
+          <ion-label>Hardware y Periféricos</ion-label>
+          <ion-icon name="game-controller-outline"></ion-icon>
+        </ion-chip>
+      </section>
 
-  <swiper-container
-    slides-per-view="1"
-    loop="true"
-    autoplay="false"
-    pagination="true"
-    navigation="true"
-    style="width: 100%; height: 250px;"
-  >
-    <swiper-slide>
-      <img src="assets/img1.jpg" />
-    </swiper-slide>
-    <swiper-slide>
-      <img src="assets/img2.jpg" />
-    </swiper-slide>
-    <swiper-slide>
-      <img src="assets/img3.jpg" />
-    </swiper-slide>
-  </swiper-container>
+      <section class="promo-carousel">
+        <swiper-container
+          class="home-swiper"
+          slides-per-view="1"
+          loop="true"
+          autoplay="true"
+          pagination="true"
+          navigation="true">
+          <swiper-slide>
+            <div class="slide">
+              <img src="assets/img1.jpg" alt="Ofertas de temporada" loading="lazy" />
+              <div class="slide-overlay">
+                <h3>Ofertas de temporada</h3>
+                <p>Hasta 30% en GPUs</p>
+              </div>
+            </div>
+          </swiper-slide>
+          <swiper-slide>
+            <div class="slide">
+              <img src="assets/img2.jpg" alt="Builds recomendadas" loading="lazy" />
+              <div class="slide-overlay">
+                <h3>Builds recomendadas</h3>
+                <p>PCs listas para jugar</p>
+              </div>
+            </div>
+          </swiper-slide>
+          <swiper-slide>
+            <div class="slide">
+              <img src="assets/img3.jpg" alt="Accesorios gamer" loading="lazy" />
+              <div class="slide-overlay">
+                <h3>Accesorios gamer</h3>
+                <p>Teclados y mouse</p>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper-container>
+      </section>
+
+      <section class="features">
+        <ion-card class="feature-card">
+          <ion-icon name="rocket-outline"></ion-icon>
+          <ion-card-header>
+            <ion-card-title>Rendimiento</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Equipos y piezas pensados para exprimir FPS y estabilidad.
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="feature-card">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          <ion-card-header>
+            <ion-card-title>Garantía</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Compra segura con garantía y soporte confiable.
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="feature-card">
+          <ion-icon name="pricetags-outline"></ion-icon>
+          <ion-card-header>
+            <ion-card-title>Ofertas</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Precios competitivos y promociones constantes.
+          </ion-card-content>
+        </ion-card>
+      </section>
+      <!-- Sección existente: “Algunos de nuestros productos” -->
+      <section>
+        <ion-title>
+          Algunos de nuestros productos
+        </ion-title>
+        <swiper-container
+          slides-per-view="1"
+          loop="true"
+          autoplay="false"
+          pagination="true"
+          navigation="true"
+          style="width: 100%; height: 250px;"
+        >
+          <!-- Reemplazo de slides estáticos por dinámicos -->
+          <swiper-slide *ngFor="let product of lastProducts">
+            <div class="slide">
+              <img
+                [src]="product.product_image || 'assets/placeholder-product.png'"
+                [alt]="product.product_name"
+                loading="lazy"
+              />
+              <div class="slide-overlay">
+                <h3>{{ product.product_name }}</h3>
+                <p>{{ product.price | currency }}</p>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper-container>
+      </section>
+  </div>
+  
+  <!-- Contenedor para ADMIN (dashboard futuro) -->
+  <ng-container *ngIf="role === 'admin'">
+    <section class="admin-dashboard">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Dashboard de ventas</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          Vista reservada para gráficas de ventas, productos más vendidos y KPIs.
+        </ion-card-content>
+      </ion-card>
+    </section>
+  </ng-container>
 </ion-content>
