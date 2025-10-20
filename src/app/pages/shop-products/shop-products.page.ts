@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription, combineLatest } from 'rxjs';
 import { ProductsSharedService } from 'src/app/services/shared/products-shared.service';
@@ -14,6 +14,7 @@ import { CartService } from 'src/app/services/firebase/cart/cart.service';
 export class ShopProductsPage implements OnInit, OnDestroy {
   type: string = 'hardware';
   products: Product[] = [];
+  selectedProduct: Product = null;
   loading = true;
 
   private sub?: Subscription;
@@ -63,5 +64,14 @@ export class ShopProductsPage implements OnInit, OnDestroy {
 
   cartQuantity(productId: string): number {
     return this.cartService.getQuantity(productId);
+  }
+
+  viewProduct(product: Product) {
+    this.selectedProduct = product;
+    document.getElementById('modalProduct').classList.toggle('modalProductActive');
+  }
+
+  clouseProduct() {
+    document.getElementById('modalProduct').classList.toggle('modalProductActive');
   }
 }

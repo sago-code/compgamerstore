@@ -1,6 +1,5 @@
 #container {
   text-align: center;
-
   position: absolute;
   left: 0;
   right: 0;
@@ -102,13 +101,18 @@
 
 /* Categorías */
 .categories {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: max-content;
+  display: flex;
   gap: 10px;
   padding: 0 16px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+  .categories {
+    justify-content: center;
+  }
 }
 
 .categories ion-chip {
@@ -117,6 +121,11 @@
   --color: var(--ion-color-sextonary);
   border: 1px solid var(--ion-color-tertiary);
   border-radius: 14px;
+}
+
+.categories ion-icon {
+  color: var(--ion-color-sextonary);
+  stroke: var(--ion-color-sextonary);
 }
 
 /* Carrusel */
@@ -145,11 +154,14 @@
   display: block;
 }
 
+
 .slide-overlay {
   position: absolute;
-  left: 0; right: 0; bottom: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   padding: 16px;
-  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.65));
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.65));
   color: #fff;
 }
 
@@ -187,13 +199,16 @@
   .home-toolbar {
     grid-template-columns: 1fr;
   }
+
   .hero {
     min-height: 280px;
     margin: 12px;
   }
+
   .home-swiper {
     height: 240px;
   }
+
   .features {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -204,10 +219,47 @@
     min-height: 250px;
     margin: 8px;
   }
+
   .home-swiper {
     height: 220px;
   }
+
   .features {
     grid-template-columns: 1fr;
   }
+}
+
+.autoplay-progress {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--swiper-theme-color);
+}
+
+.autoplay-progress svg {
+  --progress: 0;
+  position: absolute;
+  left: 0;
+  top: 0px;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  stroke-width: 4px;
+  stroke: var(--swiper-theme-color);
+  fill: none;
+  stroke-dashoffset: calc(125.6px * (1 - var(--progress)));
+  stroke-dasharray: 125.6;
+  transform: rotate(-90deg);
+}
+
+.btn-vewProducts {
+  --background: var(--ion-color-duodenary);
+  --color: var(--ion-color-sextonary);
 }

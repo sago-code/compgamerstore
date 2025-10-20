@@ -10,9 +10,18 @@
     <ng-container *ngIf="products?.length > 0; else emptyTpl">
       <div class="products-grid">
         <ion-card class="product-card" *ngFor="let p of products; trackBy: trackByUid">
+          <img [src]="p.product_image || 'assets/placeholder-product.png'" [alt]="p.product_name" />
+          <ion-card-header>
+            <ion-card-title (click)="viewProduct(p)">{{ p.product_name }}</ion-card-title>
+            <ion-card-subtitle>{{ p.type }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="product-price">
+              {{ p.price | currency }}
+            </div>
+          </ion-card-content>
           <!-- Controles de carrito -->
-          <div class="cart-controls"
-               style="position:absolute; top:8px; right:8px; display:flex; gap:6px; z-index:2; pointer-events:auto;">
+          <div class="cart-controls">
             <ion-button size="small" fill="clear" color="medium" (click)="decreaseQty(p)">
               <ion-icon name="remove-circle-outline"></ion-icon>
             </ion-button>
@@ -21,17 +30,6 @@
               <ion-icon name="add-circle-outline"></ion-icon>
             </ion-button>
           </div>
-
-          <img [src]="p.product_image || 'assets/placeholder-product.png'" [alt]="p.product_name" />
-          <ion-card-header>
-            <ion-card-title>{{ p.product_name }}</ion-card-title>
-            <ion-card-subtitle>{{ p.type }}</ion-card-subtitle>
-          </ion-card-header>
-          <ion-card-content>
-            <div class="product-price">
-              {{ p.price | currency }}
-            </div>
-          </ion-card-content>
         </ion-card>
       </div>
     </ng-container>
@@ -60,3 +58,49 @@
     </div>
   </ng-template>
 </ion-content>
+
+<!-- Modal -->
+<div class="modal fade" id="modalProduct">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <ion-card-title>{{ selectedProduct?.product_name }}</ion-card-title>
+        <button type="button" class="btn-x" data-bs-dismiss="modal" aria-label="Close" (click)="clouseProduct()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img [src]="selectedProduct?.product_image || 'assets/placeholder-product.png'"
+          [alt]="selectedProduct?.product_name" />
+        <div class="infoProduct">
+          <ion-card-header>
+            <ion-card-title>{{ selectedProduct?.product_name }}</ion-card-title>
+            <ion-card-subtitle>{{ selectedProduct?.type }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="product-price">
+              {{ selectedProduct?.price | currency }}
+            </div>
+          </ion-card-content>
+          <!-- Controles de carrito -->
+          <div class="cart-controls">
+            <ion-button size="small" fill="clear" color="medium" (click)="decreaseQty(selectedProduct)">
+              <ion-icon name="remove-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-badge color="dark">{{ cartQuantity(selectedProduct?.uid) || 0 }}</ion-badge>
+            <ion-button size="small" fill="clear" color="primary" (click)="increaseQty(selectedProduct)">
+              <ion-icon name="add-circle-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-Cerrar" data-bs-dismiss="modal" (click)="clouseProduct()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

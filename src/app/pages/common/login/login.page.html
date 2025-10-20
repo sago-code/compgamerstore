@@ -11,7 +11,8 @@
       <div class="transision"></div>
       <!-- Formulario para realizar el logeo -->
       <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
-        <ion-img src="../../../../assets/Logo/logo_light.png" alt="Logotipo" class="logo imgLogo"></ion-img>
+        <ion-img src="../../../../assets/Logo/logo_light.png" alt="Logotipo" class="logo logoLight"></ion-img>
+        <ion-img src="../../../../assets/Logo/logo_dark.png" alt="Logotipo" class="logo logoDark"></ion-img>
         <ion-item>
           <ion-label position="floating" id="emailLabel" class="emailLabel">Email</ion-label>
           <ion-input type="email" id="emailInput" class="emailInput" required formControlName="email"></ion-input>

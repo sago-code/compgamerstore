@@ -1,34 +1,93 @@
-// For information on how to create your own theme, please see:
-// http://ionicframework.com/docs/theming/
-:root {
-  --ion-toolbar-background: #0d151b !important ;
-  --ion-background-color: #1f1f1f !important ;
-  --color : #ececec !important;
-  --ion-color-primary: #16d7fa;
-  --ion-color-secondary: #7b0ca0;
-  --ion-color-tertiary: #501b73;
-  --ion-color-quaternary: #064277;
-  --ion-color-chitonary: #0d151b;
-  --ion-color-chitonary-v2: #0d151bb9;
-  --ion-color-sextonary: #ececec;
-  --ion-color-sextonary-v2: #fafafada;
-  --ion-color-septonary: var(--ion-background-color);
-  --ion-color-octonary: var(--ion-toolbar-background);
-  --ion-color-novenary: #1a1a1a;
-  --ion-color-denary: #a8a8a8;
-  --ion-color-undenary: #26acc4;
-  --ion-color-duodenary: #0a4b85;
-  --ion-color-tridenary: #042746;
-  --ion-color-quardenary: #2aaec5;
-  // Add more colors as needed
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ion-color-change-one: #0d151b81;
+    --ion-color-change-two: #ececec;
+
+    --ion-toolbar-background: #0d151b !important;
+    --ion-background-color: #1f1f1f !important;
+    --color: #ececec !important;
+    --ion-color-primary: #16d7fa;
+    --ion-color-secondary: #7b0ca0;
+    --ion-color-tertiary: #501b73;
+    --ion-color-quaternary: #064277;
+    --ion-color-chitonary: #0d151b;
+    --ion-color-chitonary-v2: #0d151bb9;
+    --ion-color-sextonary: #ececec;
+    --ion-color-sextonary-v2: #fafafada;
+    --ion-color-septonary: var(--ion-background-color);
+    --ion-color-octonary: var(--ion-toolbar-background);
+    --ion-color-novenary: #1a1a1a;
+    --ion-color-denary: #a8a8a8;
+    --ion-color-undenary: #26acc4;
+    --ion-color-duodenary: #0a4b85;
+    --ion-color-tridenary: #042746;
+    --ion-color-quardenary: #2aaec5;
+    --ion-color-sextodenary: #064175;
+    --ion-color-septodenary: #063b89;
+    --ion-color-octodenary: #383838;
+    --ion-color-novedenary: #afafaf;
+
+    //active y desactive logo
+    --logoDark: none;
+    --logoLight: block;
+  }
 }
 
-html, body, ion-app, ion-content, ion-toolbar, ion-header, ion-item, ion-back-button,
-:host, .container, .sc-ion-select-popover-md-h ion-list.sc-ion-select-popover-md,
-ion-item.sc-ion-select-popover-md
-{
+@media (prefers-color-scheme: light) {
+  :root {
+    --ion-toolbar-background: #a8a8a8 !important;
+    --ion-background-color: #ececec !important;
+    --ion-color-primary: #064277;
+    --ion-color-secondary: #501b73;
+    --ion-color-tertiary: #7b0ca0;
+    --ion-color-quaternary: #16d7fa;
+    --ion-color-chitonary: #ececec;
+    --ion-color-chitonary-v2: #fafafada;
+    --ion-color-sextonary: #0d151b;
+    --ion-color-sextonary-v2: #0d151bb9;
+    --ion-color-septonary: #ececec;
+    --ion-color-octonary: #a8a8a8;
+    --ion-color-novenary: #a8a8a8;
+    --ion-color-denary: #1a1a1a;
+    --ion-color-undenary: #0a4b85;
+    --ion-color-duodenary: #26acc4;
+    --ion-color-tridenary: #2aaec5;
+    --ion-color-quardenary: #042746;
+    --ion-color-sextodenary: #063b89;
+    --ion-color-septodenary: #064175;
+    --ion-color-octodenary: #afafaf;
+    --ion-color-novedenary: #383838;
+
+    //active y desactive logo
+    --logoDark: block;
+    --logoLight: none;
+  }
+}
+
+
+html,
+body,
+ion-app,
+ion-content,
+ion-toolbar,
+ion-header,
+ion-item,
+ion-back-button,
+:host,
+.container,
+.sc-ion-select-popover-md-h ion-list.sc-ion-select-popover-md,
+ion-item.sc-ion-select-popover-md {
   background-color: var(--ion-color-septonary) !important;
   color: var(--ion-color-sextonary) !important;
   --background: var(--ion-color-septonary) !important;
   --color: var(--ion-color-sextonary) !important;
+}
+
+
+.logoDark {
+  display: var(--logoDark);
+}
+
+.logoLight {
+  display: var(--logoLight);
 }

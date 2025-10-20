@@ -23,10 +23,10 @@
             <h1>Mejora o consigue tu PC gamer</h1>
             <p>Componentes de alto rendimiento, ofertas exclusivas y soporte experto.</p>
             <div class="hero-actions">
-              <ion-button size="large" shape="round" color="primary">
+              <ion-button size="large" shape="round" class="btn-vewProducts">
                 Ver productos
               </ion-button>
-              <ion-button fill="outline" shape="round" color="secondary">
+              <ion-button fill="outline" shape="round" color="dark">
                 Ver ofertas
               </ion-button>
             </div>
@@ -60,6 +60,7 @@
           loop="true"
           autoplay="true"
           pagination="true"
+          pagination-clickable="true"
           navigation="true">
           <swiper-slide>
             <div class="slide">
@@ -88,6 +89,12 @@
               </div>
             </div>
           </swiper-slide>
+          <div class="autoplay-progress" slot="container-end">
+            <svg viewBox="0 0 48 48">
+              <circle cx="24" cy="24" r="20"></circle>
+            </svg>
+            <span></span>
+          </div>
         </swiper-container>
       </section>
 
@@ -130,10 +137,11 @@
           #productsSwiper
           init="false"
           slides-per-view="1"
-          loop="true"
-          autoplay="false"
           pagination="true"
           navigation="true"
+          pagination-dynamic-bullets="true"
+          loop="true"
+          autoplay="true"
           style="width: 100%; height: 250px;"
         >
           <!-- Reemplazo de slides estáticos por dinámicos -->
@@ -150,7 +158,7 @@
                   <ion-icon name="add-circle-outline"></ion-icon>
                 </ion-button>
               </div>
-  
+
               <img
                 [src]="product.product_image || 'assets/placeholder-product.png'"
                 [alt]="product.product_name"
@@ -166,7 +174,7 @@
         </swiper-container>
       </section>
   </div>
-  
+
   <!-- Contenedor para ADMIN (dashboard futuro) -->
   <ng-container *ngIf="role === 'admin'">
     <section class="admin-dashboard">
